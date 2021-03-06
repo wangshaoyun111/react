@@ -1,0 +1,11 @@
+.iconfont {
+    font-size: 20px;
+}
+.iconfont.icon-my {
+    font-size: 26px;
+}
+.am-tab-bar-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+  }

@@ -1,6 +1,5 @@
 import React from 'react'
 
-
 // 导入子组件
 import News from '../News/index'
 
@@ -8,6 +7,9 @@ import News from '../News/index'
 import { Route } from 'react-router-dom'
 // 导入TabBar
 import { TabBar } from 'antd-mobile';
+
+import './index.css'
+
 export default class Home extends React.Component {
     constructor(props) {
       super(props)
@@ -51,26 +53,15 @@ export default class Home extends React.Component {
                 <Route path='/home/news' component={News}></Route>
                 <TabBar
                     unselectedTintColor="#949494"
-                    tintColor="#33A3F4"
+                    tintColor="#21b97a"
                     barTintColor="white"
                     >
                     <TabBar.Item
-                        title="Life"
+                        title="首页"
                         key="Life"
-                        icon={<div style={{
-                        width: '22px',
-                        height: '22px',
-                        background: 'url(https://zos.alipayobjects.com/rmsportal/sifuoDUQdAFKAVcFGROC.svg) center center /  21px 21px no-repeat' }}
-                        />
-                        }
-                        selectedIcon={<div style={{
-                        width: '22px',
-                        height: '22px',
-                        background: 'url(https://zos.alipayobjects.com/rmsportal/iSrlOTqrKddqbOmlvUfq.svg) center center /  21px 21px no-repeat' }}
-                        />
-                        }
+                        icon={<i className='iconfont icon-ind'></i>}
+                        selectedIcon={<i className='iconfont icon-ind'></i>}
                         selected={this.state.selectedTab === 'blueTab'}
-                        badge={1}
                         onPress={() => {
                         this.setState({
                             selectedTab: 'blueTab',
@@ -81,23 +72,10 @@ export default class Home extends React.Component {
                         {this.renderContent('Life')}
                     </TabBar.Item>
                     <TabBar.Item
-                        icon={
-                        <div style={{
-                            width: '22px',
-                            height: '22px',
-                            background: 'url(https://gw.alipayobjects.com/zos/rmsportal/BTSsmHkPsQSPTktcXyTV.svg) center center /  21px 21px no-repeat' }}
-                        />
-                        }
-                        selectedIcon={
-                        <div style={{
-                            width: '22px',
-                            height: '22px',
-                            background: 'url(https://gw.alipayobjects.com/zos/rmsportal/ekLecvKBnRazVLXbWOnE.svg) center center /  21px 21px no-repeat' }}
-                        />
-                        }
-                        title="Koubei"
+                        icon={<i className='iconfont icon-findHouse'></i>}
+                        selectedIcon={ <i className='iconfont icon-findHouse'></i>}
+                        title="找房"
                         key="Koubei"
-                        badge={'new'}
                         selected={this.state.selectedTab === 'redTab'}
                         onPress={() => {
                         this.setState({
@@ -110,22 +88,13 @@ export default class Home extends React.Component {
                     </TabBar.Item>
                     <TabBar.Item
                         icon={
-                        <div style={{
-                            width: '22px',
-                            height: '22px',
-                            background: 'url(https://zos.alipayobjects.com/rmsportal/psUFoAMjkCcjqtUCNPxB.svg) center center /  21px 21px no-repeat' }}
-                        />
+                            <i className='iconfont icon-message'></i>
                         }
                         selectedIcon={
-                        <div style={{
-                            width: '22px',
-                            height: '22px',
-                            background: 'url(https://zos.alipayobjects.com/rmsportal/IIRLrXXrFAhXVdhMWgUI.svg) center center /  21px 21px no-repeat' }}
-                        />
+                            <i className='iconfont icon-message'></i>
                         }
-                        title="Friend"
+                        title="咨询"
                         key="Friend"
-                        dot
                         selected={this.state.selectedTab === 'greenTab'}
                         onPress={() => {
                         this.setState({
@@ -136,9 +105,13 @@ export default class Home extends React.Component {
                         {this.renderContent('Friend')}
                     </TabBar.Item>
                     <TabBar.Item
-                        icon={{ uri: 'https://zos.alipayobjects.com/rmsportal/asJMfBrNqpMMlVpeInPQ.svg' }}
-                        selectedIcon={{ uri: 'https://zos.alipayobjects.com/rmsportal/gjpzzcrPMkhfEqgbYvmN.svg' }}
-                        title="My"
+                         icon={
+                            <i className='iconfont icon-my'></i>
+                        }
+                        selectedIcon={
+                            <i className='iconfont icon-my'></i>
+                        }
+                        title="我的"
                         key="my"
                         selected={this.state.selectedTab === 'yellowTab'}
                         onPress={() => {
