@@ -1,6 +1,4 @@
 import React from 'react'
-// 按需导入
-import { Button } from 'antd-mobile'
 
 // 导入组件
 import Home from './pages/Home/index'
@@ -11,9 +9,6 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <p>我是跟组件</p>
-        <Button>Start</Button>
-
         <ul>
           {/* 配置路由入口 */}
           <li><Link to='/home'>去 Home 页面</Link></li>
