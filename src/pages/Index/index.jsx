@@ -1,44 +1,51 @@
 import React from 'react'
 
+// 导图axios
+import axios from 'axios'
 // 导入轮播图组件
 import { Carousel } from 'antd-mobile';
 export default class Index extends React.Component {
     state = {
-      data: ['1', '2', '3'], // 数据
-      imgHeight: 176, // 高度
+      swipers: [], // 数据
     }
 
     componentDidMount() {
-      // simulate img loading
-      setTimeout(() => {
+        // 调用获取数据方法
+        this.getSwipers()
+    }
+
+    // 获取数据的方法
+    async getSwipers() {
+        const {data: res} = await axios.get('http://api-haoke-web.itheima.net/home/swiper')
+        console.log(res)
+        if (res.status !== 200) return
         this.setState({
-          data: ['AiyWuByWklrrUDlFignR', 'TekJlZRVCjLFexlOCuWn', 'IJOtIlfsYdTyaDTRVrLI'],
-        });
-      }, 100);
+            swipers: res.body
+        })
+    }
+
+    // 渲染轮播图结构方法
+    renderSwipwe() {
+        return this.state.swipers.map(item => (
+            <a
+            key={item.id}
+            href="true"
+            style={{ display: 'inline-block', width: '100%', height: '212px' }}
+            >
+            <img
+                src={`http://api-haoke-web.itheima.net${item.imgSrc}`}
+                alt=""
+                style={{ width: '100%', verticalAlign: 'top' }}
+            />
+            </a>
+        ))
     }
 
     render() {
         return (
             <div>
-                <Carousel
-                    autoplay={false}
-                    infinite
-                    beforeChange={(from, to) => console.log(`slide from ${from} to ${to}`)}
-                    afterChange={index => console.log('slide to', index)}
-                    >
-                    {this.state.data.map(val => (
-                        <a
-                        key={val}
-                        href="true"
-                        style={{ display: 'inline-block', width: '100%', height: this.state.imgHeight }}
-                        >
-                        <img
-                            src={`https://zos.alipayobjects.com/rmsportal/${val}.png`}
-                            alt=""
-                            style={{ width: '100%', verticalAlign: 'top' }}
-                        />
-                        </a>
-                    ))}
+                <Carousel autoplay={true} infinite>
+                    {this.renderSwipwe()}
                 </Carousel>
             </div>
         )
