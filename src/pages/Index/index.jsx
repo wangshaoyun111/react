@@ -45,7 +45,8 @@ export default class Index extends React.Component {
         swipers: [], // 数据
         IndexFlag: false, // 数据完全返回在渲染轮播图，解决bug
         groups:[], // 租房小组数据
-        news:[] // 最新资讯
+        news:[], // 最新资讯
+        currentCityName:'' //当前城市名称
     }
 
     componentDidMount() {
@@ -55,6 +56,18 @@ export default class Index extends React.Component {
         this.getGroup()
         // 资讯列表数据
         this.getNews()
+        // 获取地理位置信息
+        var myCity = new window.BMap.LocalCity()
+        myCity.get(async result => {
+            console.log(result.name)
+            const cityName = result.name
+            const {data:res} =  await axios.get(`http://api-haoke-web.itheima.net/area/info?name=${cityName}`)
+            console.log(res)
+            if (res.status !== 200) return
+            this.setState({
+                currentCityName:res.body.label
+            })
+        })
     }
 
     // 获取轮播数据的方法
@@ -178,7 +191,7 @@ export default class Index extends React.Component {
                             className="location"
                             onClick={() => this.props.history.push('/citylist')}
                             >
-                            <span className="name">上海</span>
+                                <span className="name">{ this.state.currentCityName }</span>
                             <i className="iconfont icon-arrow" />
                         </div>
 
