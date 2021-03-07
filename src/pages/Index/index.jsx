@@ -159,9 +159,9 @@ export default class Index extends React.Component {
     
     render() {
         return (
-            <div className='swiper'>
+            <div className='index-container'>
                 {/* 轮播图组件 */}
-                <div>
+                <div  className='swiper'>
                     {
                         this.state.IndexFlag ? (
                             <Carousel autoplay={true} infinite>
