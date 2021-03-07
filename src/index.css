@@ -2,6 +2,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  touch-action:pan-y ;
 }
 
 html, body {
@@ -10,7 +11,9 @@ html, body {
   color: #333;
   background-color: #fff;
 }
-
+#root, .App {
+  height: 100%;
+}
 ul, li {
   list-style: none;
 }

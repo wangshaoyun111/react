@@ -3,6 +3,7 @@ import React from 'react'
 // 导入组件
 import Home from './pages/Home/index'
 import CityList from './pages/CityList/index'
+import Map from './pages/Map/index'
 // 导入路由配置文件
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 function App() {
@@ -16,6 +17,7 @@ function App() {
         {/* render={ () => <Redirect to="/home" /> } */}
         <Route path='/' render={ () => <Redirect to="/home" /> }></Route>
         <Route path='/home' component={ Home } ></Route>
+        <Route path='/map' component={ Map } ></Route>
         <Route path='/cityList' component={ CityList } ></Route>
       </div>
     </Router>
