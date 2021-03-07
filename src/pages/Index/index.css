@@ -1,0 +1,14 @@
+.nav{
+    padding: 10px 0px;
+}
+.am-flexbox-item {
+    text-align: center;
+}
+.nav img {
+    width: 48px;
+    height: 48px;
+}
+.nav h2 {
+    font-size: 14px;
+    font-weight: normal;
+}
