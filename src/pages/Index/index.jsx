@@ -3,7 +3,7 @@ import React from 'react'
 // 导图axios
 import axios from 'axios'
 // 导入轮播图组件,flex组件
-import { Carousel, Flex,Grid  } from 'antd-mobile';
+import { Carousel, Flex,Grid,WingBlank  } from 'antd-mobile';
 
 // 导入样式文件
 import './index.scss'
@@ -38,12 +38,14 @@ const navs = [
       title: '去出租',
       path: '/rent/add'
     }
-]    
+]
+
 export default class Index extends React.Component {
     state = {
         swipers: [], // 数据
         IndexFlag: false, // 数据完全返回在渲染轮播图，解决bug
-        groups:[] // 租房小组数据
+        groups:[], // 租房小组数据
+        news:[] // 最新资讯
     }
 
     componentDidMount() {
@@ -51,6 +53,8 @@ export default class Index extends React.Component {
         this.getSwipers()
         // 租房信息数据
         this.getGroup()
+        // 资讯列表数据
+        this.getNews()
     }
 
     // 获取轮播数据的方法
@@ -63,6 +67,7 @@ export default class Index extends React.Component {
             IndexFlag: true
         })
     }
+    
     // 获取租房小组数据
     async getGroup() {
         const { data: res } = await axios.get('http://api-haoke-web.itheima.net/home/groups')
@@ -72,6 +77,16 @@ export default class Index extends React.Component {
             groups: res.body
         })
     }
+
+    // 获取最新资讯
+    async getNews() {
+        const res = await axios.get('http://api-haoke-web.itheima.net/home/news?area=AREA%7C88cff55c-aaa4-e2e0')
+    
+        this.setState({
+        news: res.data.body
+        })
+    }
+
     // 渲染轮播图结构方法
     renderSwipwe() {
         return this.state.swipers.map(item => (
@@ -99,9 +114,52 @@ export default class Index extends React.Component {
         ))
     }
 
+    // 渲染宫格组件
+    renderGroups() {
+        return (
+            <Grid
+                data={this.state.groups}
+                columnNum={2}
+                square={false}
+                hasLine={false}
+                renderItem={item => (
+                <Flex className="group-item" justify="around" key={item.id}>
+                    <div className="desc">
+                    <p className="title">{item.title}</p>
+                    <span className="info">{item.desc}</span>
+                    </div>
+                    <img src={'http://api-haoke-web.itheima.net' + item.imgSrc} alt="" />
+                </Flex>
+                )}
+            />
+        )
+    }
+
+    // 渲染最新资讯结构方法
+    renderNews() {
+        return this.state.news.map(item => (
+        <div className="news-item" key={item.id}>
+            <div className="imgwrap">
+            <img
+                className="img"
+                src={'http://api-haoke-web.itheima.net' + item.imgSrc}
+                alt=""
+            />
+            </div>
+            <Flex className="content" direction="column" justify="between">
+            <h3 className="title">{item.title}</h3>
+            <Flex className="info" justify="between">
+                <span>{item.from}</span>
+                <span>{item.date}</span>
+            </Flex>
+            </Flex>
+        </div>
+        ))
+    }
+    
     render() {
         return (
-            <div>
+            <div className='swiper'>
                 {/* 轮播图组件 */}
                 <div>
                     {
@@ -111,34 +169,55 @@ export default class Index extends React.Component {
                             </Carousel>
                         ) : ''
                     }
+                    {/* 搜索框 */}
+                    <Flex className="search-box">
+                    {/* 左侧白色区域 */}
+                    <Flex className="search">
+                        {/* 位置 */}
+                        <div
+                            className="location"
+                            onClick={() => this.props.history.push('/citylist')}
+                            >
+                            <span className="name">上海</span>
+                            <i className="iconfont icon-arrow" />
+                        </div>
+
+                        {/* 搜索表单 */}
+                        <div
+                            className="form"
+                            onClick={() => this.props.history.push('/search')}
+                            >
+                            <i className="iconfont icon-seach" />
+                            <span className="text">请输入小区或地址</span>
+                        </div>
+                    </Flex>
+                    {/* 右侧地图图标 */}
+                    <i
+                        className="iconfont icon-map"
+                        onClick={() => this.props.history.push('/map')}
+                    />
+                    </Flex>
                 </div>
+                
                 {/* 导航菜单区域 */}
                 <Flex className='nav'>
                     { this.renderNavs() }
                 </Flex>
-
+                
                 {/* 租房小组 */}
                 <div className="group">
-                <h3 className="group-title">
-                    租房小组 <span className="more">更多</span>
-                </h3>
+                    <h3 className="group-title">
+                        租房小组 <span className="more">更多</span>
+                    </h3>
 
-                {/* 宫格组件 */}
-                <Grid
-                    data={this.state.groups}
-                    columnNum={2}
-                    square={false}
-                    hasLine={false}
-                    renderItem={item => (
-                    <Flex className="group-item" justify="around" key={item.id}>
-                        <div className="desc">
-                        <p className="title">{item.title}</p>
-                        <span className="info">{item.desc}</span>
-                        </div>
-                        <img src={'http://api-haoke-web.itheima.net' + item.imgSrc} alt="" />
-                    </Flex>
-                    )}
-                />
+                    {/* 宫格组件 */}
+                    { this.renderGroups() }
+                </div>
+                
+                {/* 最新资讯 */}
+                <div className="news">
+                    <h3 className="group-title">最新资讯</h3>
+                    <WingBlank size="md">{this.renderNews()}</WingBlank>
                 </div>
             </div>
         )

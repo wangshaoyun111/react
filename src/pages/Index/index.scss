@@ -74,3 +74,114 @@
       }
     }
   }
+// 最新资讯：
+.news {
+  padding: 10px;
+  background-color: #fff;
+  overflow: hidden;
+  margin-bottom: 50px;
+  .group-title {
+    margin: 10px 0 5px 10px;
+    font-size: 15px;
+  }
+
+  .news-item {
+    height: 120px;
+    padding: 15px 10px 15px 0;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .news-item:last-child {
+    border: 0;
+  }
+
+  .imgwrap {
+    float: left;
+    height: 90px;
+    width: 120px;
+  }
+
+  .img {
+    height: 90px;
+    width: 120px;
+  }
+
+  .content {
+    overflow: hidden;
+    height: 100%;
+    padding-left: 12px;
+  }
+
+  .title {
+    margin-bottom: 15px;
+    font-size: 14px;
+  }
+
+  .info {
+    width: 100%;
+    color: #9c9fa1;
+    font-size: 12px;
+  }
+
+  .message-title {
+    margin-bottom: 48px;
+  }
+}
+
+.swiper {
+  position: relative;
+  height: 212px;
+
+  // 顶部导航
+  .search-box {
+    position: absolute;
+    top: 25px;
+    width: 100%;
+    padding: 0 10px;
+
+    // 左侧白色区域
+    .search {
+      flex: 1;
+      height: 34px;
+      margin: 0 10px;
+      padding: 5px 5px 5px 8px;
+      border-radius: 3px;
+      background-color: #fff;
+
+      // 位置
+      .location {
+        .icon-arrow {
+          margin-left: 2px;
+          font-size: 12px;
+          color: #7f7f80;
+        }
+      }
+
+      // 搜索表单
+      .form {
+        border-left: solid 1px #e5e5e5;
+        margin-left: 12px;
+        line-height: 16px;
+
+        .icon-seach {
+          vertical-align: middle;
+          padding: 0 2px 0 12px;
+          color: #9c9fa1;
+          font-size: 15px;
+        }
+
+        .text {
+          padding-left: 4px;
+          font-size: 13px;
+          color: #9c9fa1;
+        }
+      }
+    }
+
+    // 右侧地图图标
+    .icon-map {
+      font-size: 25px;
+      color: #fff;
+    }
+  }
+}
