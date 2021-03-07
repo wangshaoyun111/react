@@ -45,6 +45,14 @@ export default class Home extends React.Component {
         // fullScreen: true, // 是否全屏展示
       }
     }
+    // 更新的钩子函数
+    componentDidUpdate(prevProps,prevState) {
+      if (prevProps.location.pathname !== this.props.location.pathname) {
+        this.setState({
+          selectedTab:this.props.location.pathname
+        })
+      }
+    }
     // 渲染 方法
     renderTabBarItem() {
         return tabItems.map(item => {
