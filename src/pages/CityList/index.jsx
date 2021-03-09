@@ -33,13 +33,13 @@ export default class CityList extends React.Component {
         this.getCityList()
     }
     // 获取城市列表数据方法
-    async getCityList () {
+    async getCityList() {
         const { data: res } = await axios.get('http://api-haoke-web.itheima.net/area/city?level=1')
         if (res.status !== 200) return
         // 获取数据以后处理数据格式获取想要格式
         const { cityList, cityIndex } = formatCityData(res.body)
 
-        const { data:result } =  await axios.get('http://api-haoke-web.itheima.net/area/hot')
+        const { data: result } = await axios.get('http://api-haoke-web.itheima.net/area/hot')
         cityList['hot'] = result.body
         cityIndex.unshift('hot')
         console.log(cityList);
