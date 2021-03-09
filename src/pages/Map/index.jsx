@@ -2,11 +2,11 @@ import React from 'react'
 
 import './index.css'
 export default class Profile extends React.Component {
-    
+
     componentDidMount() {
         // 初始化地图实例
         const map = new window.BMap.Map("container")
-        
+
         // 设置中心坐标点
         const point = new window.BMap.Point(116.404, 39.915)
 
