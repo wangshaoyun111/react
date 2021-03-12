@@ -30,30 +30,33 @@ const formatCityData = (list) => {
         cityIndex
     }
 }
-// list 组件数据源
-const list = Array(150).fill('我是长列表')
-
-// rowRenderer list组件 渲染方法
-// 页面内容 渲染函数
-function rowRenderer({
-    key, // 确保渲染元素的唯一性
-    index, // 索引号
-    isScrolling, // 当前渲染这一项是否正在滚动中
-    isVisible, // 当前渲染这一项是否还在可视区渲染
-    style, // 重要   必须的  是给渲染出来的每一行添加定位信息，指定每一行位置
-}) {
-    return (
-        <div key={key} style={style}>
-            {list[index]} -- {isScrolling + ''} -- {isVisible + ''}
-        </div>
-    );
+// 处理城市列表索引项字母
+const formatCityIndex = (letter) => {
+    switch (letter) {
+        case '#':
+            return '当前定位'
+        case 'hot':
+            return '热门城市'
+        default:
+            return letter.toUpperCase()
+    }
 }
-
+// 索引 (A,B等级)高度
+const TITLE_HEIGHT = 36
+const CITYNAME_HEIGHT = 50
 export default class CityList extends React.Component {
+    constructor() {
+        super()
+        this.state = {
+            cityList: {}, // 城市列表
+            cityIndex: [] // 城市索引
+        }
+    }
     componentDidMount() {
         // 调用获取城市数据方法
         this.getCityList()
     }
+
     // 获取城市列表数据方法
     async getCityList() {
         const { data: res } = await axios.get('http://api-haoke-web.itheima.net/area/city?level=1')
@@ -70,11 +73,45 @@ export default class CityList extends React.Component {
 
         cityList['#'] = [currentCity]
         cityIndex.unshift('#')
-
-        console.log(cityList);
-        console.log(cityIndex);
+        this.setState({
+            cityList,
+            cityIndex
+        })
     }
 
+    // rowRenderer list组件 渲染方法
+    // 页面内容 渲染函数
+    rowRenderer = ({
+        key, // 确保渲染元素的唯一性
+        index, // 索引号
+        isScrolling, // 当前渲染这一项是否正在滚动中
+        isVisible, // 当前渲染这一项是否还在可视区渲染
+        style, // 重要   必须的  是给渲染出来的每一行添加定位信息，指定每一行位置
+    }) => {
+        // 从state取出数据
+        const { cityList, cityIndex } = this.state
+        // 从cityIndex 取出对应索引值
+        const letter = cityIndex[index]
+        return (
+            <div key={key} style={style} className='city-list'>
+                <div className="title">{formatCityIndex(letter)}</div>
+                {
+                    cityList[letter].map(item => (
+                        <div className='name' key={item.value}>
+                            {item.label}
+                        </div>
+                    ))
+                }
+            </div>
+        );
+    }
+
+
+    // 动态创建索引高度方法
+    getRowHeight = ({ index }) => {
+        const { cityList, cityIndex } = this.state
+        return TITLE_HEIGHT + cityList[cityIndex[index]].length * CITYNAME_HEIGHT
+    }
     render() {
         return (
             // 顶部导航
@@ -94,9 +131,9 @@ export default class CityList extends React.Component {
                             <List
                                 width={width}
                                 height={height}
-                                rowCount={list.length}
-                                rowHeight={20}
-                                rowRenderer={rowRenderer}
+                                rowCount={this.state.cityIndex.length}
+                                rowHeight={this.getRowHeight}
+                                rowRenderer={this.rowRenderer}
                             />
                         )
                     }

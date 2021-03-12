@@ -15,3 +15,17 @@
   font-size: 16px;
   color: #333;
 }
+
+.ciyilist-container .city-list .title {
+  font-size: 14px;
+  color: #999;
+  padding: 10px 16px;
+}
+
+.ciyilist-container .city-list .name {
+  height: 50px;
+  line-height: 50px;
+  padding: 0 15px;
+  font-size: 16px;
+  border-bottom: 1px solid #eee;
+}
