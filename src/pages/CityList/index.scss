@@ -1,12 +1,16 @@
 .ciyilist-container {
+  height: 100%;
     // 顶部导航兰
     .navBar {
       color: #333;
       background-color: #f6f5f6;
-  
+      position: sticky;
+      top: 0;
+      left: 0;
+      z-index: 99;
      .icon-back {
-         font-size: 16px;
-       color: #333;
+        font-size: 16px;
+        color: #333;
      }
     }
   }

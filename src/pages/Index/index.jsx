@@ -12,6 +12,9 @@ import Nav1 from '../../assets/images/nav-1.png'
 import Nav2 from '../../assets/images/nav-2.png'
 import Nav3 from '../../assets/images/nav-3.png'
 import Nav4 from '../../assets/images/nav-4.png'
+// 导入获取定位城市方法
+import { getCurrentCityName } from '../../utils/getCityName.js'
+
 // 导航数据
 const navs = [
     {
@@ -49,7 +52,7 @@ export default class Index extends React.Component {
         currentCityName: '' //当前城市名称
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         // 调用轮播获取数据方法
         this.getSwipers()
         // 租房信息数据
@@ -57,17 +60,21 @@ export default class Index extends React.Component {
         // 资讯列表数据
         this.getNews()
         // 获取地理位置信息
-        var myCity = new window.BMap.LocalCity()
-        myCity.get(async result => {
-            console.log(result.name)
-            const cityName = result.name
-            const { data: res } = await axios.get(`http://api-haoke-web.itheima.net/area/info?name=${cityName}`)
-            console.log(res)
-            if (res.status !== 200) return
-            this.setState({
-                currentCityName: res.body.label
-            })
+        const currentCity = await getCurrentCityName()
+        this.setState({
+            currentCityName: currentCity.label
         })
+        // var myCity = new window.BMap.LocalCity()
+        // myCity.get(async result => {
+        //     console.log(result.name)
+        //     const cityName = result.name
+        //     const { data: res } = await axios.get(`http://api-haoke-web.itheima.net/area/info?name=${cityName}`)
+        //     console.log(res)
+        //     if (res.status !== 200) return
+        //     this.setState({
+        //         currentCityName: res.body.label
+        //     })
+        // })
     }
 
     // 获取轮播数据的方法
