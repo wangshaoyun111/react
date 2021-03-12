@@ -44,12 +44,14 @@ const formatCityIndex = (letter) => {
 // 索引 (A,B等级)高度
 const TITLE_HEIGHT = 36
 const CITYNAME_HEIGHT = 50
+
 export default class CityList extends React.Component {
     constructor() {
         super()
         this.state = {
             cityList: {}, // 城市列表
-            cityIndex: [] // 城市索引
+            cityIndex: [], // 城市索引
+            activeIndex: 0  // 控制右侧索引高亮
         }
     }
     componentDidMount() {
@@ -79,6 +81,18 @@ export default class CityList extends React.Component {
         })
     }
 
+    // 渲染城市列表索引方法
+    renderCityIndex() {
+        // 获取数据
+        // 生成结构
+        const { cityIndex, activeIndex } = this.state
+        return cityIndex.map((item, index) => (
+            <li className="city-index-item" key={item}>
+                <span className={activeIndex === index ? 'index-active' : ''}>{item === 'hot' ? '热' : item.toUpperCase()}</span>
+            </li>
+        ))
+    }
+
     // rowRenderer list组件 渲染方法
     // 页面内容 渲染函数
     rowRenderer = ({
@@ -106,6 +120,16 @@ export default class CityList extends React.Component {
         );
     }
 
+    // 滑动城市列表 让城市高亮
+    onRowsRendered = ({ startIndex }) => {
+        // startIndex 就是list 当前可视区域渲染时最顶部一行的索引
+        if (this.state.activeIndex !== startIndex) {
+            this.setState({
+                activeIndex: startIndex
+            })
+        }
+        console.log(startIndex);
+    }
 
     // 动态创建索引高度方法
     getRowHeight = ({ index }) => {
@@ -134,10 +158,15 @@ export default class CityList extends React.Component {
                                 rowCount={this.state.cityIndex.length}
                                 rowHeight={this.getRowHeight}
                                 rowRenderer={this.rowRenderer}
+                                onRowsRendered={this.onRowsRendered}
                             />
                         )
                     }
                 </AutoSizer>
+                {/* 城市列表索引区域 */}
+                <ul className="city-index">
+                    {this.renderCityIndex()}
+                </ul>
             </div>
         )
     }

@@ -15,10 +15,10 @@ function App() {
         {/* render 属性对应是函数 函数内部使用Redirect重定向组件 */}
         {/* Redirect组件有to属性 */}
         {/* render={ () => <Redirect to="/home" /> } */}
-        <Route path='/' render={ () => <Redirect to="/home" /> }></Route>
-        <Route path='/home' component={ Home } ></Route>
-        <Route path='/map' component={ Map } ></Route>
-        <Route path='/cityList' component={ CityList } ></Route>
+        <Route path='/' exact render={() => <Redirect to="/home" />}></Route>
+        <Route path='/home' component={Home} ></Route>
+        <Route path='/map' component={Map} ></Route>
+        <Route path='/cityList' component={CityList} ></Route>
       </div>
     </Router>
   )
