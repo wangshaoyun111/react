@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import { NavBar } from 'antd-mobile'
+import { NavBar, Toast } from 'antd-mobile'
 // 导入react-virtualized List组件
 import { List, AutoSizer } from 'react-virtualized'
 import './index.scss'
@@ -44,7 +44,8 @@ const formatCityIndex = (letter) => {
 // 索引 (A,B等级)高度
 const TITLE_HEIGHT = 36
 const CITYNAME_HEIGHT = 50
-
+// 当前包含城市房源信息的数组
+const HOUSE_CITY = ['北京', '上海', '广州', '深圳']
 export default class CityList extends React.Component {
     constructor() {
         super()
@@ -53,10 +54,16 @@ export default class CityList extends React.Component {
             cityIndex: [], // 城市索引
             activeIndex: 0  // 控制右侧索引高亮
         }
+
+        // 获取dom元素
+        this.cityListComponent = React.createRef()
     }
-    componentDidMount() {
+    async componentDidMount() {
         // 调用获取城市数据方法
-        this.getCityList()
+        await this.getCityList()
+
+        // 调用list组件方法让列表点击精度
+        this.cityListComponent.current.measureAllRows()
     }
 
     // 获取城市列表数据方法
@@ -87,7 +94,9 @@ export default class CityList extends React.Component {
         // 生成结构
         const { cityIndex, activeIndex } = this.state
         return cityIndex.map((item, index) => (
-            <li className="city-index-item" key={item}>
+            <li className="city-index-item" key={item} onClick={() => {
+                this.cityListComponent.current.scrollToRow(index)
+            }}>
                 <span className={activeIndex === index ? 'index-active' : ''}>{item === 'hot' ? '热' : item.toUpperCase()}</span>
             </li>
         ))
@@ -111,7 +120,9 @@ export default class CityList extends React.Component {
                 <div className="title">{formatCityIndex(letter)}</div>
                 {
                     cityList[letter].map(item => (
-                        <div className='name' key={item.value}>
+                        <div className='name' key={item.value} onClick={() => {
+                            this.changeCity(item)
+                        }}>
                             {item.label}
                         </div>
                     ))
@@ -120,6 +131,16 @@ export default class CityList extends React.Component {
         );
     }
 
+    // 切换城市
+    changeCity = ({ label, value }) => {
+        // console.log(cityInfo)
+        if (HOUSE_CITY.indexOf(label) > -1) {
+            localStorage.setItem('hkzf_city', JSON.stringify({ label, value }))
+            this.props.history.go(-1)
+        } else {
+            Toast.info('该城市暂无房源数据', 2, null, false)
+        }
+    }
     // 滑动城市列表 让城市高亮
     onRowsRendered = ({ startIndex }) => {
         // startIndex 就是list 当前可视区域渲染时最顶部一行的索引
@@ -153,6 +174,8 @@ export default class CityList extends React.Component {
                     {
                         ({ height, width }) => (
                             <List
+                                ref={this.cityListComponent}
+                                scrollToAlignment='start'
                                 width={width}
                                 height={height}
                                 rowCount={this.state.cityIndex.length}
