@@ -1,6 +1,8 @@
 import React from 'react'
 import axios from 'axios'
 import { NavBar, Toast } from 'antd-mobile'
+import NavHeader from '../../components/NavHeader/index'
+
 // 导入react-virtualized List组件
 import { List, AutoSizer } from 'react-virtualized'
 import './index.scss'
@@ -161,13 +163,7 @@ export default class CityList extends React.Component {
         return (
             // 顶部导航
             <div className='ciyilist-container'>
-                <NavBar
-                    className='navBar'
-                    mode="light"
-                    icon={<i className='iconfont icon-back'></i>}
-                    onLeftClick={() => this.props.history.go(-1)}>
-                    城市选择
-                </NavBar>
+                <NavHeader history={this.props.history}>城市选择</NavHeader>
 
                 {/* 城市列表区域 */}
                 <AutoSizer>
