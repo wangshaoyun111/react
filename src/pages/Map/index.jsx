@@ -17,9 +17,7 @@ export default class Profile extends React.Component {
         return (
             <div className='map-container'>
                 {/* 顶部导航栏 */}
-                <NavHeader onLeftClick={() => {
-                    this.props.history.go(-1)
-                }}>地图找房</NavHeader>
+                <NavHeader>地图找房</NavHeader>
                 {/* 地图容器 */}
                 <div id="container"></div>
             </div>

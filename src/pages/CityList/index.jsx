@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import { NavBar, Toast } from 'antd-mobile'
+import { Toast } from 'antd-mobile'
 import NavHeader from '../../components/NavHeader/index'
 
 // 导入react-virtualized List组件
@@ -163,7 +163,7 @@ export default class CityList extends React.Component {
         return (
             // 顶部导航
             <div className='ciyilist-container'>
-                <NavHeader history={this.props.history}>城市选择</NavHeader>
+                <NavHeader>城市选择</NavHeader>
 
                 {/* 城市列表区域 */}
                 <AutoSizer>
