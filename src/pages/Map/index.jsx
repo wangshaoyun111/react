@@ -18,9 +18,26 @@ export default class Profile extends React.Component {
             if (point) {
                 // centerAndZoom 方法 调整地图的缩放级别
                 map.centerAndZoom(point, 11)
-
                 map.addControl(new window.BMap.ScaleControl())
                 map.addControl(new window.BMap.NavigationControl())
+                const opts = {
+                    position: point,    // 指定文本标注所在的地理位置
+                    offset: new window.BMap.Size(20, 20)    //设置文本偏移量
+                }
+                // 创建label 方法，绘制文本覆盖物,
+                // 第一个参数是需要添加文本
+                // 第二个参数为文本覆盖物的定位
+                const label = new window.BMap.Label("文本信息~", opts)
+                // 设置样式
+                label.setStyle({
+                    color: "red",
+                    fontSize: "12px",
+                    height: "20px",
+                    lineHeight: "20px",
+                    fontFamily: "微软雅黑"
+                })
+                // 将覆盖物添加到地图中
+                map.addOverlay(label)
             }
         }, label)
     }
