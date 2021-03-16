@@ -1,5 +1,4 @@
-.navBar {
-  color: #333;
+.navbar {
   background-color: #f6f5f6;
   position: sticky;
   top: 0;
@@ -7,7 +6,7 @@
   z-index: 99;
 }
 
-.navBar .icon-back {
+.icon-back {
   font-size: 16px;
   color: #333;
 }

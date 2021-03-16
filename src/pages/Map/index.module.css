@@ -1,9 +1,11 @@
-.map_container, .container{
+.map_container, .container {
     height: 100%;
-}
-.my_navbar {
+  }
+  
+  .my_navbar {
     position: sticky;
     top: 0;
     left: 0;
     z-index: 99;
-}
+  }
+  
