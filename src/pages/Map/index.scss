@@ -1,3 +1,9 @@
 .map-container, #container{
     height: 100%;
 }
+.my-navbar {
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 99;
+}

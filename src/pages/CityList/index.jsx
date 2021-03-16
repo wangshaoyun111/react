@@ -163,7 +163,9 @@ export default class CityList extends React.Component {
         return (
             // 顶部导航
             <div className='ciyilist-container'>
-                <NavHeader>城市选择</NavHeader>
+                <div className='my-navbar'>
+                    <NavHeader>城市选择</NavHeader>
+                </div>
 
                 {/* 城市列表区域 */}
                 <AutoSizer>
