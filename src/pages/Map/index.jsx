@@ -1,6 +1,16 @@
 import React from 'react'
 import NavHeader from '../../components/NavHeader/index'
 import styles from './index.module.css'
+// 覆盖物样式
+const labelStyle = {
+    cursor: 'pointer',
+    border: '0px solid rgb(255, 0, 0)',
+    padding: '0px',
+    whiteSpace: 'nowrap',
+    fontSize: '12px',
+    color: 'rgb(255, 255, 255)',
+    textAlign: 'center'
+}
 export default class Profile extends React.Component {
 
     componentDidMount() {
@@ -28,13 +38,18 @@ export default class Profile extends React.Component {
                 // 第一个参数是需要添加文本
                 // 第二个参数为文本覆盖物的定位
                 const label = new window.BMap.Label("文本信息~", opts)
+                label.setContent(`
+                    <div class="${styles.bubble}">
+                        <p class="${styles.name}">航头镇</p>
+                        <p>100套</p>
+                    </div>
+                `)
                 // 设置样式
-                label.setStyle({
-                    color: "red",
-                    fontSize: "12px",
-                    height: "20px",
-                    lineHeight: "20px",
-                    fontFamily: "微软雅黑"
+                label.setStyle(labelStyle)
+
+                // 给房源覆盖物绑定点击事件
+                label.addEventListener('click', () => {
+                    console.log(111);
                 })
                 // 将覆盖物添加到地图中
                 map.addOverlay(label)

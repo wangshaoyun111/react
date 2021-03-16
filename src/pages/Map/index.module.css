@@ -8,4 +8,22 @@
     left: 0;
     z-index: 99;
   }
+/* 覆盖物样式： */
+.bubble {
+    width: 70px;
+    height: 70px;
+    line-height: 1;
+    display: inline-block;
+    position: absolute;
+    border-radius: 100%;
+    background: rgba(12, 181, 106, 0.9);
+    color: #fff;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    text-align: center;
+    cursor: pointer;
+  }
+  
+  .name {
+    padding: 18px 0 6px 0;
+  }
   
