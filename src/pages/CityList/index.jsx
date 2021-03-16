@@ -5,7 +5,7 @@ import NavHeader from '../../components/NavHeader/index'
 
 // 导入react-virtualized List组件
 import { List, AutoSizer } from 'react-virtualized'
-import './index.scss'
+import styles from './index.module.css'
 
 // 导入封装获取城市信息方法
 import { getCurrentCityName } from '../../utils/getCityName.js'
@@ -96,10 +96,10 @@ export default class CityList extends React.Component {
         // 生成结构
         const { cityIndex, activeIndex } = this.state
         return cityIndex.map((item, index) => (
-            <li className="city-index-item" key={item} onClick={() => {
+            <li className={styles.city_index_item} key={item} onClick={() => {
                 this.cityListComponent.current.scrollToRow(index)
             }}>
-                <span className={activeIndex === index ? 'index-active' : ''}>{item === 'hot' ? '热' : item.toUpperCase()}</span>
+                <span className={activeIndex === index ? styles.index_active : ''}>{item === 'hot' ? '热' : item.toUpperCase()}</span>
             </li>
         ))
     }
@@ -119,10 +119,10 @@ export default class CityList extends React.Component {
         const letter = cityIndex[index]
         return (
             <div key={key} style={style} className='city-list'>
-                <div className="title">{formatCityIndex(letter)}</div>
+                <div className={styles.title}>{formatCityIndex(letter)}</div>
                 {
                     cityList[letter].map(item => (
-                        <div className='name' key={item.value} onClick={() => {
+                        <div className={styles.name} key={item.value} onClick={() => {
                             this.changeCity(item)
                         }}>
                             {item.label}
@@ -162,8 +162,8 @@ export default class CityList extends React.Component {
     render() {
         return (
             // 顶部导航
-            <div className='ciyilist-container'>
-                <div className='my-navbar'>
+            <div className={styles.ciyilist_container}>
+                <div className={styles.my_navbar}>
                     <NavHeader>城市选择</NavHeader>
                 </div>
 
@@ -185,7 +185,7 @@ export default class CityList extends React.Component {
                     }
                 </AutoSizer>
                 {/* 城市列表索引区域 */}
-                <ul className="city-index">
+                <ul className={styles.city_index}>
                     {this.renderCityIndex()}
                 </ul>
             </div>

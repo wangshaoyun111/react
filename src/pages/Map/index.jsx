@@ -1,6 +1,6 @@
 import React from 'react'
 import NavHeader from '../../components/NavHeader/index'
-import './index.css'
+import styles from './index.module.css'
 export default class Profile extends React.Component {
 
     componentDidMount() {
@@ -15,13 +15,13 @@ export default class Profile extends React.Component {
     }
     render() {
         return (
-            <div className='map-container'>
+            <div className={styles.map_container}>
                 {/* 顶部导航栏 */}
-                <div className='my-navbar'>
+                <div className={styles.my_navbar}>
                     <NavHeader onLeftClick={() => this.props.history.go(-1)}>地图找房</NavHeader>
                 </div>
                 {/* 地图容器 */}
-                <div id="container"></div>
+                <div id="container" className={styles.container}></div>
             </div>
         )
     }
