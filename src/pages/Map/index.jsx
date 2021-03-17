@@ -65,7 +65,13 @@ export default class Profile extends React.Component {
 
                     // 给房源覆盖物绑定点击事件
                     label.addEventListener('click', () => {
-                        console.log(label.id);
+                        map.centerAndZoom(point, 13)
+                        // 需要将清空覆盖物代码放到定时器中，在清除覆盖物的时候
+                        // 地图会重新初始化放大级别，如果直接进行清除会报错
+                        // 需要将地图初始化以后在进行移除
+                        setTimeout(() => {
+                            map.clearOverlays()
+                        }, 0)
                     })
                     // 将覆盖物添加到地图中
                     map.addOverlay(label)
