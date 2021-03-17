@@ -48,26 +48,25 @@ export default class Profile extends React.Component {
         res.body.forEach(item => {
             this.createOverlays(item, nextZoom, type)
         })
-        // 调用 getTypeAndZoom 方法获取级别和类型
-
     }
 
     // 计算要绘制的覆盖物类型和下一个缩放级别
     getTypeAndZoom() {
-        // 返回下一个缩放级别类型和等级
+        // getTypeAndZoom 这个方法需要返回下一个缩放级别的类型和等级
         let nextZoom, type
-        // 调用地图的 getZoom() 方法，来获取当前缩放级别
+        // 需要根据当前的缩放等级去渲染下一个等级
         const zoom = this.map.getZoom()
+
         if (zoom >= 10 && zoom < 12) {
-            // 说明当前是区，下一个缩放级别是13，代表是镇
+            // 说明当前是区，下一个缩放级别是 13，代表是镇
             nextZoom = 13
             type = 'circle'
         } else if (zoom >= 12 && zoom < 14) {
-            // 说明当前是镇，下一个缩放级别是15，代表是小区
+            // 说明当前是镇，下一个缩放级别是 15，代表是小区
             nextZoom = 15
             type = 'circle'
         } else if (zoom >= 14 && zoom < 16) {
-            // 说明当前是小区，不需要缩放只需要设置覆盖物类型为 rect
+            // 说明当前点击的是小区，只需要设置覆盖物类型为 rect 即可
             type = 'rect'
         }
 
@@ -86,14 +85,16 @@ export default class Profile extends React.Component {
             count,
             value
         } = item
-        // 根据获取的精度维度 通过方法，生产地理位置
+
+        // 根据获取的精度、纬度，调用 BMap.Point 方法，生成地理位置
         const areaPoint = new window.BMap.Point(longitude, latitude)
+
         if (type === 'circle') {
-            // 说明渲染区和镇
+            // 区和镇
             this.createCircle(areaPoint, value, areaName, count, nextZoom)
         } else {
             // 小区
-            this.createRect()
+            this.createRect(areaPoint, value, areaName, count)
         }
     }
 
@@ -107,14 +108,17 @@ export default class Profile extends React.Component {
         // 创建label 方法，绘制文本覆盖物,
         // 第一个参数是需要添加文本
         // 第二个参数为文本覆盖物的定位
-        const label = new window.BMap.Label("", opts)
+        const label = new window.BMap.Label('', opts)
+
         label.id = id
+
+        // setContent 方法创建覆盖物的结构
         label.setContent(`
-                    <div class="${styles.bubble}">
-                        <p class="${styles.name}">${areaName}</p>
-                        <p>${count}</p>
-                    </div>
-                `)
+          <div class="${styles.bubble}">
+            <p class="${styles.name}">${areaName}</p>
+            <p>${count}套</p>
+          </div>
+        `)
         // 设置样式
         label.setStyle(labelStyle)
 
@@ -135,7 +139,37 @@ export default class Profile extends React.Component {
     }
 
     // 创建小区覆盖物
-    createRect() { }
+    c// 创建小区覆盖物
+    createRect(point, name, count, id) {
+        // 创建覆盖物
+        const label = new window.BMap.Label('', {
+            position: point,
+            offset: new window.BMap.Size(-50, -28)
+        })
+
+        // 给 label 对象添加一个唯一标识
+        label.id = id
+
+        // 设置房源覆盖物内容
+        label.setContent(`
+        <div class="${styles.rect}">
+            <span class="${styles.housename}">${name}</span>
+            <span class="${styles.housenum}">${count}套</span>
+            <i class="${styles.arrow}"></i>
+        </div>
+        `)
+
+        // 设置样式
+        label.setStyle(labelStyle)
+
+        // 添加单击事件
+        label.addEventListener('click', () => {
+            console.log('小区被点击了')
+        })
+
+        // 添加覆盖物到地图中
+        this.map.addOverlay(label)
+    }
 
     render() {
         return (
