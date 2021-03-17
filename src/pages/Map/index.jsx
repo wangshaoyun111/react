@@ -41,6 +41,7 @@ export default class Profile extends React.Component {
     // 接收id获取房源数据
     // 需要获取覆盖物类型，获取缩放级别
     async renderOverlays(id) {
+        const { nextZoom, type } = this.getTypeAndZoom()
         // 调用接口
         const { data: res } = await axios.get(`https://api-haoke-web.itheima.net/area/map?id=${id}`)
         if (res.status !== 200) return
@@ -48,7 +49,7 @@ export default class Profile extends React.Component {
             this.createOverlays(item, nextZoom, type)
         })
         // 调用 getTypeAndZoom 方法获取级别和类型
-        const { nextZoom, type } = this.getTypeAndZoom()
+
     }
 
     // 计算要绘制的覆盖物类型和下一个缩放级别
@@ -94,42 +95,42 @@ export default class Profile extends React.Component {
             // 小区
             this.createRect()
         }
-        // 调用接口获取房源数据
-        const { data: res } = await axios.get(`https://api-haoke-web.itheima.net/area/map?id=${value}`)
-        if (res.status !== 200) return
-        res.body.forEach(item => {
-            console.log(item);
-            const opts = {
-                position: areaPoint,    // 指定文本标注所在的地理位置
-                offset: new window.BMap.Size(20, 20)    //设置文本偏移量
-            }
-            // 创建label 方法，绘制文本覆盖物,
-            // 第一个参数是需要添加文本
-            // 第二个参数为文本覆盖物的定位
-            const label = new window.BMap.Label("", opts)
-            label.id = value
-            label.setContent(`
-                <div class="${styles.bubble}">
-                    <p class="${styles.name}">${areaName}</p>
-                    <p>${count}</p>
-                </div>
-            `)
-            // 设置样式
-            label.setStyle(labelStyle)
+        // // 调用接口获取房源数据
+        // const { data: res } = await axios.get(`https://api-haoke-web.itheima.net/area/map?id=${value}`)
+        // if (res.status !== 200) return
+        // res.body.forEach(item => {
+        //     console.log(item);
+        //     const opts = {
+        //         position: areaPoint,    // 指定文本标注所在的地理位置
+        //         offset: new window.BMap.Size(20, 20)    //设置文本偏移量
+        //     }
+        //     // 创建label 方法，绘制文本覆盖物,
+        //     // 第一个参数是需要添加文本
+        //     // 第二个参数为文本覆盖物的定位
+        //     const label = new window.BMap.Label("", opts)
+        //     label.id = value
+        //     label.setContent(`
+        //         <div class="${styles.bubble}">
+        //             <p class="${styles.name}">${areaName}</p>
+        //             <p>${count}</p>
+        //         </div>
+        //     `)
+        //     // 设置样式
+        //     label.setStyle(labelStyle)
 
-            // 给房源覆盖物绑定点击事件
-            label.addEventListener('click', () => {
-                map.centerAndZoom(point, 13)
-                // 需要将清空覆盖物代码放到定时器中，在清除覆盖物的时候
-                // 地图会重新初始化放大级别，如果直接进行清除会报错
-                // 需要将地图初始化以后在进行移除
-                setTimeout(() => {
-                    map.clearOverlays()
-                }, 0)
-            })
-            // 将覆盖物添加到地图中
-            map.addOverlay(label)
-        })
+        //     // 给房源覆盖物绑定点击事件
+        //     label.addEventListener('click', () => {
+        //         map.centerAndZoom(point, 13)
+        //         // 需要将清空覆盖物代码放到定时器中，在清除覆盖物的时候
+        //         // 地图会重新初始化放大级别，如果直接进行清除会报错
+        //         // 需要将地图初始化以后在进行移除
+        //         setTimeout(() => {
+        //             map.clearOverlays()
+        //         }, 0)
+        //     })
+        //     // 将覆盖物添加到地图中
+        //     map.addOverlay(label)
+        // })
     }
 
     // 渲染区、镇覆盖物
