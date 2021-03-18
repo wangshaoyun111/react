@@ -2,6 +2,7 @@ import React from 'react'
 import NavHeader from '../../components/NavHeader/index'
 import styles from './index.module.css'
 import axios from 'axios'
+const BMap = window.BMap
 // 覆盖物样式
 const labelStyle = {
     cursor: 'pointer',
@@ -12,39 +13,46 @@ const labelStyle = {
     color: 'rgb(255, 255, 255)',
     textAlign: 'center'
 }
-export default class Profile extends React.Component {
+export default class Map extends React.Component {
 
     componentDidMount() {
+        this.initMap()
+    }
+    // 百度地图初始化方法
+    initMap() {
         // 初始化地图实例
-        const map = new window.BMap.Map("container")
+        const map = new BMap.Map("container")
         this.map = map
-        // 获取到当前城市定位信息
+
+        // 获取到当前城市的定位信息
         const { label, value } = JSON.parse(localStorage.getItem('hkzf_city'))
 
-        // 调用百度地图解析器,生成解析器实例
-        const myGeo = new window.BMap.Geocoder()
+        // 调用百度地图的地址解析器，生成解析器实例
+        const myGeo = new BMap.Geocoder()
 
-        // 根据地址定位当前地图展示信息
+        // 根据地址定位当前地图的展示信息
         myGeo.getPoint(label, async (point) => {
             if (point) {
-                // centerAndZoom 方法 调整地图的缩放级别
+                // centerAndZoom 这个方法是调整地图的缩放级别
                 map.centerAndZoom(point, 11)
-                map.addControl(new window.BMap.ScaleControl())
-                map.addControl(new window.BMap.NavigationControl())
 
+                map.addControl(new BMap.ScaleControl())
+                map.addControl(new BMap.NavigationControl())
+
+                console.log(this)
                 this.renderOverlays(value)
             }
         }, label)
     }
-
     // 声明入口方法
     // 接收id获取房源数据
     // 需要获取覆盖物类型，获取缩放级别
     async renderOverlays(id) {
-        const { nextZoom, type } = this.getTypeAndZoom()
         // 调用接口
         const { data: res } = await axios.get(`https://api-haoke-web.itheima.net/area/map?id=${id}`)
         if (res.status !== 200) return
+        const { nextZoom, type } = this.getTypeAndZoom()
+
         res.body.forEach(item => {
             this.createOverlays(item, nextZoom, type)
         })
@@ -87,7 +95,7 @@ export default class Profile extends React.Component {
         } = item
 
         // 根据获取的精度、纬度，调用 BMap.Point 方法，生成地理位置
-        const areaPoint = new window.BMap.Point(longitude, latitude)
+        const areaPoint = new BMap.Point(longitude, latitude)
 
         if (type === 'circle') {
             // 区和镇
@@ -102,13 +110,16 @@ export default class Profile extends React.Component {
     // 根据传入数据和缩放级别
     createCircle(point, id, areaName, count, nextZoom) {
         const opts = {
-            position: point,    // 指定文本标注所在的地理位置
-            offset: new window.BMap.Size(20, 20)    //设置文本偏移量
+            // 目前这个 point 地理位置是固定的，所以在页面上只能看到一个房源信息
+            // 需要将每个区镇的精度、纬度传递给 position ，才能够渲染出来对应的区镇
+            position: point, // 指定文本标注所在的地理位置
+            offset: new BMap.Size(20, 20) //设置文本偏移量
         }
-        // 创建label 方法，绘制文本覆盖物,
-        // 第一个参数是需要添加文本
-        // 第二个参数为文本覆盖物的定位
-        const label = new window.BMap.Label('', opts)
+
+        // 创建 Label 实例对象，绘制文本覆盖物
+        // 第一个参数，是需要添加覆盖的文本
+        // 第二个参数，是文本覆盖物的定位
+        const label = new BMap.Label('', opts)
 
         label.id = id
 
@@ -119,55 +130,64 @@ export default class Profile extends React.Component {
             <p>${count}套</p>
           </div>
         `)
-        // 设置样式
+
+        // 给添加的文本覆盖物设置样式
         label.setStyle(labelStyle)
 
-        // // 给房源覆盖物绑定点击事件
+        // 给房源覆盖物绑定点击事件
         label.addEventListener('click', () => {
             this.renderOverlays(label.id)
-            // 设置下一次的缩放级别，并设置覆盖物
+            console.log(label.id);
+            console.log(nextZoom);
+            // 设置下一个的缩放级别，并设置覆盖物
             this.map.centerAndZoom(point, nextZoom)
-            // // 需要将清空覆盖物代码放到定时器中，在清除覆盖物的时候
-            // // 地图会重新初始化放大级别，如果直接进行清除会报错
-            // // 需要将地图初始化以后在进行移除
+
+            // 清除之前的覆盖物，创建下一个级别的覆盖物
             setTimeout(() => {
                 this.map.clearOverlays()
             }, 0)
         })
-        // 将覆盖物添加到地图中
+
+        // 通过 addOverlay 方法将文本覆盖物添加到地图上
         this.map.addOverlay(label)
     }
 
     // 创建小区覆盖物
-    c// 创建小区覆盖物
-    createRect(point, name, count, id) {
-        // 创建覆盖物
-        const label = new window.BMap.Label('', {
-            position: point,
-            offset: new window.BMap.Size(-50, -28)
-        })
+    // 创建小区覆盖物
+    createRect(point, id, areaName, count) {
+        const opts = {
+            // 目前这个 point 地理位置是固定的，所以在页面上只能看到一个房源信息
+            // 需要将每个区镇的精度、纬度传递给 position ，才能够渲染出来对应的区镇
+            position: point, // 指定文本标注所在的地理位置
+            offset: new BMap.Size(20, 20) //设置文本偏移量
+        }
 
-        // 给 label 对象添加一个唯一标识
+        // 创建 Label 实例对象，绘制文本覆盖物
+        // 第一个参数，是需要添加覆盖的文本
+        // 第二个参数，是文本覆盖物的定位
+        const label = new BMap.Label('', opts)
+
         label.id = id
 
-        // 设置房源覆盖物内容
+        // setContent 方法创建覆盖物的结构
+        // 调整成镇的覆盖物信息
         label.setContent(`
-        <div class="${styles.rect}">
-            <span class="${styles.housename}">${name}</span>
+          <div class="${styles.rect}">
+            <span class="${styles.housename}">${areaName}</span>
             <span class="${styles.housenum}">${count}套</span>
             <i class="${styles.arrow}"></i>
-        </div>
+          </div>
         `)
 
-        // 设置样式
+        // 给添加的文本覆盖物设置样式
         label.setStyle(labelStyle)
 
-        // 添加单击事件
-        label.addEventListener('click', () => {
-            console.log('小区被点击了')
+        // 给房源覆盖物绑定点击事件
+        label.addEventListener('click', (e) => {
+            console.log(111);
         })
 
-        // 添加覆盖物到地图中
+        // 通过 addOverlay 方法将文本覆盖物添加到地图上
         this.map.addOverlay(label)
     }
 
