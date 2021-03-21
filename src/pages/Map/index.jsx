@@ -1,7 +1,7 @@
 import React from 'react'
 import NavHeader from '../../components/NavHeader/index'
 import { Link } from 'react-router-dom'
-
+import { Toast } from 'antd-mobile'
 import styles from './index.module.css'
 import axios from 'axios'
 const BMap = window.BMap
@@ -62,14 +62,21 @@ export default class Map extends React.Component {
     // 接收id获取房源数据
     // 需要获取覆盖物类型，获取缩放级别
     async renderOverlays(id) {
-        // 调用接口
-        const { data: res } = await axios.get(`https://api-haoke-web.itheima.net/area/map?id=${id}`)
-        if (res.status !== 200) return
-        const { nextZoom, type } = this.getTypeAndZoom()
+        try {
+            Toast.loading('加载中...')
+            // 调用接口
+            const { data: res } = await axios.get(`https://api-haoke-web.itheima.net/area/map?id=${id}`)
+            Toast.hide()
+            if (res.status !== 200) return
+            const { nextZoom, type } = this.getTypeAndZoom()
 
-        res.body.forEach(item => {
-            this.createOverlays(item, nextZoom, type)
-        })
+            res.body.forEach(item => {
+                this.createOverlays(item, nextZoom, type)
+            })
+        } catch (error) {
+            Toast.hide()
+        }
+
     }
 
     // 计算要绘制的覆盖物类型和下一个缩放级别
@@ -216,13 +223,19 @@ export default class Map extends React.Component {
 
     // 获取小区房源数据的方法
     async getHouseList(id) {
-        const { data: res } = await axios.get(`https://api-haoke-web.itheima.net/houses?cityId=${id}`)
-        if (res.status !== 200) return
-        console.log(res.body)
-        this.setState({
-            houseList: res.body.list,
-            isShowFlag: true
-        })
+        try {
+            Toast.loading('加载中...')
+            const { data: res } = await axios.get(`https://api-haoke-web.itheima.net/houses?cityId=${id}`)
+            Toast.hide()
+            if (res.status !== 200) return
+            console.log(res.body)
+            this.setState({
+                houseList: res.body.list,
+                isShowFlag: true
+            })
+        } catch (error) {
+            Toast.hide()
+        }
     }
 
     // 渲染小区 ui 结构的方法
