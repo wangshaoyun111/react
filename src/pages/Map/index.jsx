@@ -1,5 +1,7 @@
 import React from 'react'
 import NavHeader from '../../components/NavHeader/index'
+import { Link } from 'react-router-dom'
+
 import styles from './index.module.css'
 import axios from 'axios'
 const BMap = window.BMap
@@ -14,7 +16,10 @@ const labelStyle = {
     textAlign: 'center'
 }
 export default class Map extends React.Component {
-
+    state = {
+        houseList: [], //小区下的房源数据
+        isShowFlag: false
+    }
     componentDidMount() {
         this.initMap()
     }
@@ -43,6 +48,15 @@ export default class Map extends React.Component {
                 this.renderOverlays(value)
             }
         }, label)
+        // 地图移动事件，在地图移动过程中，隐藏房源列表
+        map.addEventListener('movestart', () => {
+            if (this.state.isShowFlag) {
+                this.setState({
+                    isShowFlag: false
+                })
+            }
+
+        })
     }
     // 声明入口方法
     // 接收id获取房源数据
@@ -184,13 +198,64 @@ export default class Map extends React.Component {
 
         // 给房源覆盖物绑定点击事件
         label.addEventListener('click', (e) => {
-            console.log(111);
+            // 调用获取小区房源的方法
+            this.getHouseList(label.id)
+
+            // 根据点击的坐标点来调用地图的 panBy 方法来移动
+            const target = e.changedTouches[0]
+            // 方法接收 x y 两个坐标轴作为参数
+            this.map.panBy(
+                window.innerWidth / 2 - target.clientX, // X轴
+                (window.innerHeight - 300) / 2 - target.clientY // Y轴
+            )
         })
 
         // 通过 addOverlay 方法将文本覆盖物添加到地图上
         this.map.addOverlay(label)
     }
 
+    // 获取小区房源数据的方法
+    async getHouseList(id) {
+        const { data: res } = await axios.get(`https://api-haoke-web.itheima.net/houses?cityId=${id}`)
+        if (res.status !== 200) return
+        console.log(res.body)
+        this.setState({
+            houseList: res.body.list,
+            isShowFlag: true
+        })
+    }
+
+    // 渲染小区 ui 结构的方法
+    renderHouseList() {
+        return this.state.houseList.map(item => (
+            <div className={styles.house} key={item.houseCode}>
+                <div className={styles.imgWrap}>
+                    <img
+                        className={styles.img}
+                        src={`https://api-haoke-web.itheima.net${item.houseImg}`}
+                        alt=""
+                    />
+                </div>
+                <div className={styles.content}>
+                    <h3 className={styles.title}>{item.title}</h3>
+                    <div className={styles.desc}>{item.desc}</div>
+                    <div>
+                        {item.tags.map(tag => (
+                            <span
+                                className={[styles.tag, styles.tag1].join(' ')}
+                                key={tag}
+                            >
+                                {tag}
+                            </span>
+                        ))}
+                    </div>
+                    <div className={styles.price}>
+                        <span className={styles.priceNum}>{item.price}</span> 元/月
+                    </div>
+                </div>
+            </div>
+        ))
+    }
     render() {
         return (
             <div className={styles.map_container}>
@@ -201,6 +266,25 @@ export default class Map extends React.Component {
 
                 {/* 地图容器元素 */}
                 <div id="container" className={styles.container}></div>
+                {/* 小区房源列表数据 */}
+                <div
+                    className={[
+                        styles.houseList,
+                        this.state.isShowFlag ? styles.show : ''
+                    ].join(' ')}
+                >
+                    <div className={styles.titleWrap}>
+                        <h1 className={styles.listTitle}>房屋列表</h1>
+                        <Link className={styles.titleMore} to="/home/list">
+                            更多房源
+                        </Link>
+                    </div>
+
+                    <div className={styles.houseItems}>
+                        {/* 房屋结构 */}
+                        {this.renderHouseList()}
+                    </div>
+                </div>
             </div>
         )
     }
