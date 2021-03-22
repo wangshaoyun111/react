@@ -1,12 +1,15 @@
 import React from 'react'
 
-// 导图axios
-import axios from 'axios'
+// 导入API
+import { API } from '../../utils/api.js'
 // 导入轮播图组件,flex组件
 import { Carousel, Flex, Grid, WingBlank } from 'antd-mobile';
 
 // 导入样式文件
 import './index.scss'
+
+// 导入 BASE_URL 变量
+import { BASE_URL } from '../../utils/url.js'
 // 导入图片
 import Nav1 from '../../assets/images/nav-1.png'
 import Nav2 from '../../assets/images/nav-2.png'
@@ -68,7 +71,7 @@ export default class Index extends React.Component {
         // myCity.get(async result => {
         //     console.log(result.name)
         //     const cityName = result.name
-        //     const { data: res } = await axios.get(`http://api-haoke-web.itheima.net/area/info?name=${cityName}`)
+        //     const { data: res } = await API.get(`/area/info?name=${cityName}`)
         //     console.log(res)
         //     if (res.status !== 200) return
         //     this.setState({
@@ -79,7 +82,7 @@ export default class Index extends React.Component {
 
     // 获取轮播数据的方法
     async getSwipers() {
-        const { data: res } = await axios.get('http://api-haoke-web.itheima.net/home/swiper')
+        const { data: res } = await API.get('/home/swiper')
         console.log(res)
         if (res.status !== 200) return
         this.setState({
@@ -90,7 +93,7 @@ export default class Index extends React.Component {
 
     // 获取租房小组数据
     async getGroup() {
-        const { data: res } = await axios.get('http://api-haoke-web.itheima.net/home/groups')
+        const { data: res } = await API.get('/home/groups')
         console.log(res);
         if (res.status !== 200) return
         this.setState({
@@ -100,7 +103,7 @@ export default class Index extends React.Component {
 
     // 获取最新资讯
     async getNews() {
-        const res = await axios.get('http://api-haoke-web.itheima.net/home/news?area=AREA%7C88cff55c-aaa4-e2e0')
+        const res = await API.get('/home/news?area=AREA%7C88cff55c-aaa4-e2e0')
 
         this.setState({
             news: res.data.body
@@ -116,7 +119,7 @@ export default class Index extends React.Component {
                 style={{ display: 'inline-block', width: '100%', height: '212px' }}
             >
                 <img
-                    src={`http://api-haoke-web.itheima.net${item.imgSrc}`}
+                    src={BASE_URL + item.imgSrc}
                     alt=""
                     style={{ width: '100%', verticalAlign: 'top' }}
                 />
@@ -148,7 +151,7 @@ export default class Index extends React.Component {
                             <p className="title">{item.title}</p>
                             <span className="info">{item.desc}</span>
                         </div>
-                        <img src={'http://api-haoke-web.itheima.net' + item.imgSrc} alt="" />
+                        <img src={BASE_URL + item.imgSrc} alt="" />
                     </Flex>
                 )}
             />
@@ -162,7 +165,7 @@ export default class Index extends React.Component {
                 <div className="imgwrap">
                     <img
                         className="img"
-                        src={'http://api-haoke-web.itheima.net' + item.imgSrc}
+                        src={BASE_URL + item.imgSrc}
                         alt=""
                     />
                 </div>

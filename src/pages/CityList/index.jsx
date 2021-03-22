@@ -1,5 +1,5 @@
 import React from 'react'
-import axios from 'axios'
+import { API } from '../../utils/api.js'
 import { Toast } from 'antd-mobile'
 import NavHeader from '../../components/NavHeader/index'
 
@@ -70,12 +70,12 @@ export default class CityList extends React.Component {
 
     // 获取城市列表数据方法
     async getCityList() {
-        const { data: res } = await axios.get('http://api-haoke-web.itheima.net/area/city?level=1')
+        const { data: res } = await API.get('/area/city?level=1')
         if (res.status !== 200) return
         // 获取数据以后处理数据格式获取想要格式
         const { cityList, cityIndex } = formatCityData(res.body)
 
-        const { data: result } = await axios.get('http://api-haoke-web.itheima.net/area/hot')
+        const { data: result } = await API.get('/area/hot')
         cityList['hot'] = result.body
         cityIndex.unshift('hot')
         // 调用获取当前城市定位的方法

@@ -2,7 +2,7 @@
  * 封装获取当前城市位置的方法和后台交换 获取带ID 的城市对象
  */
 
-import axios from 'axios'
+import { API } from './api.js'
 
 // 1、创建获取当前城市位置的发生
 export const getCurrentCityName = () => {
@@ -18,7 +18,7 @@ export const getCurrentCityName = () => {
                 myCity.get(async result => {
                     console.log(result.name)
                     const cityName = result.name
-                    const { data: res } = await axios.get(`http://api-haoke-web.itheima.net/area/info?name=${cityName}`)
+                    const { data: res } = await API.get(`/area/info?name=${cityName}`)
                     console.log(res)
                     if (res.status !== 200) return
                     // 获取成功存储到本地

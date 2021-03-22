@@ -3,7 +3,11 @@ import NavHeader from '../../components/NavHeader/index'
 import { Link } from 'react-router-dom'
 import { Toast } from 'antd-mobile'
 import styles from './index.module.css'
-import axios from 'axios'
+// import axios from 'axios'
+import { API } from '../../utils/api.js'
+
+// 导入 BASE_URL 变量
+import { BASE_URL } from '../../utils/url.js'
 const BMap = window.BMap
 // 覆盖物样式
 const labelStyle = {
@@ -65,7 +69,7 @@ export default class Map extends React.Component {
         try {
             Toast.loading('加载中...')
             // 调用接口
-            const { data: res } = await axios.get(`https://api-haoke-web.itheima.net/area/map?id=${id}`)
+            const { data: res } = await API.get(`/area/map?id=${id}`)
             Toast.hide()
             if (res.status !== 200) return
             const { nextZoom, type } = this.getTypeAndZoom()
@@ -225,7 +229,7 @@ export default class Map extends React.Component {
     async getHouseList(id) {
         try {
             Toast.loading('加载中...')
-            const { data: res } = await axios.get(`https://api-haoke-web.itheima.net/houses?cityId=${id}`)
+            const { data: res } = await API.get(`/houses?cityId=${id}`)
             Toast.hide()
             if (res.status !== 200) return
             console.log(res.body)
@@ -245,7 +249,7 @@ export default class Map extends React.Component {
                 <div className={styles.imgWrap}>
                     <img
                         className={styles.img}
-                        src={`https://api-haoke-web.itheima.net${item.houseImg}`}
+                        src={BASE_URL + item.houseImg}
                         alt=""
                     />
                 </div>
