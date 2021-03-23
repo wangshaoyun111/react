@@ -4,9 +4,14 @@ import React from 'react'
 import { Flex } from 'antd-mobile'
 
 import './index.scss'
+
+// 导入校验 props 的方法
+import PropTypes from 'prop-types'
+
+import { withRouter } from 'react-router-dom'
 // 如果是函数组件需要导入 withRouter 组件，获取路由对象
-// 因为是类组件，直接能获取路由信息 ，history可以直接使用
-export default class SearchHeader extends React.Component {
+// 如果是类组件 ，也需要使用 withRouter
+class SearchHeader extends React.Component {
     render() {
         return (
             <Flex className={['search-box', this.props.className || ''].join(' ')}>
@@ -39,3 +44,10 @@ export default class SearchHeader extends React.Component {
         )
     }
 }
+
+SearchHeader.propTypes = {
+    currentCityName: PropTypes.string.isRequired,
+    className: PropTypes.string
+}
+
+export default withRouter(SearchHeader)

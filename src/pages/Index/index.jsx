@@ -18,6 +18,8 @@ import Nav4 from '../../assets/images/nav-4.png'
 // 导入获取定位城市方法
 import { getCurrentCityName } from '../../utils/getCityName.js'
 
+// 导入封装的顶部搜索栏组件
+import SearchHeader from '../../components/SearchHeader/index.jsx'
 // 导航数据
 const navs = [
     {
@@ -193,33 +195,7 @@ export default class Index extends React.Component {
                         ) : ''
                     }
                     {/* 搜索框 */}
-                    <Flex className="search-box">
-                        {/* 左侧白色区域 */}
-                        <Flex className="search">
-                            {/* 位置 */}
-                            <div
-                                className="location"
-                                onClick={() => this.props.history.push('/citylist')}
-                            >
-                                <span className="name">{this.state.currentCityName}</span>
-                                <i className="iconfont icon-arrow" />
-                            </div>
-
-                            {/* 搜索表单 */}
-                            <div
-                                className="form"
-                                onClick={() => this.props.history.push('/search')}
-                            >
-                                <i className="iconfont icon-seach" />
-                                <span className="text">请输入小区或地址</span>
-                            </div>
-                        </Flex>
-                        {/* 右侧地图图标 */}
-                        <i
-                            className="iconfont icon-map"
-                            onClick={() => this.props.history.push('/map')}
-                        />
-                    </Flex>
+                    <SearchHeader currentCityName={this.state.currentCityName}></SearchHeader>
                 </div>
 
                 {/* 导航菜单区域 */}
