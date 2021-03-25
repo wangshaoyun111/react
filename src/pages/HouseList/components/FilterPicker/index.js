@@ -91,6 +91,9 @@ export default class FilterPicker extends Component {
   render() {
     return (
       <>
+        {/* `<></>` 语法是 `<React.Fragment>` 的简化语法，
+        作用：不添加额外元素，返回多个节点 */}
+
         {/* 选择器组件： */}
         <PickerView data={province} value={null} cols={3} />
 
