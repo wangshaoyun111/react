@@ -88,19 +88,29 @@ const province = [
 ]
 
 export default class FilterPicker extends Component {
+  state = {
+    value: ''
+  }
+  // 获取选中以后的picker值
+  pickerHandle = (value) => {
+    console.log(value);
+    this.setState({
+      value: value
+    })
+  }
   render() {
-    const { onCancel, onSave } = this.props
-
+    const { onCancel, onSave, data, cols, type } = this.props
+    const { value } = this.state
     return (
       <>
         {/* `<></>` 语法是 `<React.Fragment>` 的简化语法，
         作用：不添加额外元素，返回多个节点 */}
 
         {/* 选择器组件： */}
-        <PickerView data={province} value={null} cols={3} />
+        <PickerView data={data} value={value} cols={cols} onChange={this.pickerHandle} />
 
         {/* 底部按钮 */}
-        <FilterFooter onCancel={onCancel} onOk={onSave} />
+        <FilterFooter onCancel={() => onCancel()} onOk={() => onSave(type, value)} />
       </>
     )
   }
