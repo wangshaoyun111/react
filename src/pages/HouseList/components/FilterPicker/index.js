@@ -89,6 +89,8 @@ const province = [
 
 export default class FilterPicker extends Component {
   render() {
+    const { onCancel, onSave } = this.props
+
     return (
       <>
         {/* `<></>` 语法是 `<React.Fragment>` 的简化语法，
@@ -98,7 +100,7 @@ export default class FilterPicker extends Component {
         <PickerView data={province} value={null} cols={3} />
 
         {/* 底部按钮 */}
-        <FilterFooter />
+        <FilterFooter onCancel={onCancel} onOk={onSave} />
       </>
     )
   }
