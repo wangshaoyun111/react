@@ -89,7 +89,7 @@ const province = [
 
 export default class FilterPicker extends Component {
   state = {
-    value: ''
+    value: this.props.defaultValue
   }
   // 获取选中以后的picker值
   pickerHandle = (value) => {

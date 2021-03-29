@@ -14,10 +14,18 @@ const titleSelectedStatus = {
   price: false,
   more: false
 }
+// 选中的值
+const selectedValues = {
+  area: ['area', 'null'],
+  mode: ['null'],
+  price: ['null'],
+  more: []
+}
 // 获取当前定位城市id
 export default class Filter extends Component {
   state = {
     titleSelectedStatus, // 控制高亮
+    selectedValues,
     openType: '', // 控制组件展开和合并
     filtersData: []
   }
@@ -28,10 +36,36 @@ export default class Filter extends Component {
   }
   onTitleClick = (type) => {
     // console.log(type)
+    const { titleSelectedStatus, selectedValues } = this.state
+    // 创建新的标题选中状态对象
+    const newTitleSelectedStatus = { ...titleSelectedStatus }
+    // 使用object.keys 遍历选中状态对象
+    // 判断是否是当前标题，没有：高亮，不是：取消高亮
+    Object.keys(titleSelectedStatus).forEach(item => {
+      if (item === type) {
+        newTitleSelectedStatus[type] = true
+        return
+      }
+
+      // 处理其他标题与默认值是否一致
+      const selectedVal = selectedValues[item]
+      // 判断长度是否等于2，或者判断第一项是不是area ，不是，代表是subway 显示高亮
+      if (item === 'area' && (selectedVal.length !== 2 || selectedVal[0] !== 'area')) {
+        newTitleSelectedStatus[item] = true
+      } else if (item === 'mode' && selectedVal[0] !== 'null') {
+        newTitleSelectedStatus[item] = true
+      } else if (item === 'price' && selectedVal[0] !== 'null') {
+        newTitleSelectedStatus[item] = true
+      } else if (item === 'more') {
+
+      } else {
+        newTitleSelectedStatus[item] = false
+      }
+    })
     // 点击条件筛选 切换高亮
     this.setState((state) => {
       return {
-        titleSelectedStatus: { ...state.titleSelectedStatus, [type]: true },
+        titleSelectedStatus: newTitleSelectedStatus,
         openType: type
       }
     })
@@ -55,7 +89,8 @@ export default class Filter extends Component {
   onSave = (type, value) => {
     console.log(type, value);
     this.setState({
-      openType: ''
+      openType: '',
+      selectedValues: { ...this.state.selectedValues, [type]: value }
     })
   }
   // 渲染组件数据的方法
@@ -63,10 +98,14 @@ export default class Filter extends Component {
     const {
       openType,
       filtersData: { area, subway, rentType, price },
+      selectedValues
     } = this.state
     if (openType !== 'area' && openType !== 'mode' && openType !== 'price') {
       return null
     }
+    // 获取到当前选中的值
+
+    const defaultValue = selectedValues[openType]
     let data = [] // 根据openType 决定需要渲染的数据
     let cols = 3 // 选择器列数
     // 判断
@@ -88,11 +127,13 @@ export default class Filter extends Component {
     }
     return (
       <FilterPicker
+        key={openType}
         onCancel={this.onCancel}
         data={data}
         cols={cols}
         onSave={this.onSave}
         type={openType}
+        defaultValue={defaultValue}
       />)
   }
   render() {
