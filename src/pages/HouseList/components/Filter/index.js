@@ -136,6 +136,18 @@ export default class Filter extends Component {
         defaultValue={defaultValue}
       />)
   }
+  // 渲染 FilterMore 组件方法
+  renderFilterMore() {
+    const {
+      openType,
+      filtersData: { roomType, oriented, floor, characteristic }
+    } = this.state
+    if (openType !== 'more') return
+    const data = {
+      roomType, oriented, floor, characteristic
+    }
+    return <FilterMore data={data} />
+  }
   render() {
     const { titleSelectedStatus, openType } = this.state
     return (
@@ -158,7 +170,7 @@ export default class Filter extends Component {
           {/*  */}
 
           {/* 最后一个菜单对应的内容： */}
-          {/* <FilterMore /> */}
+          {this.renderFilterMore()}
         </div>
       </div>
     )
