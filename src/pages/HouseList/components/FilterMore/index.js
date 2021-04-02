@@ -56,12 +56,12 @@ export default class FilterMore extends Component {
 
   }
   render() {
-    const { data: { roomType, oriented, floor, characteristic }, onSave, type } = this.props
+    const { data: { roomType, oriented, floor, characteristic }, onSave, type, onCancel } = this.props
     const { selectedValues } = this.state
     return (
       <div className={styles.root}>
         {/* 遮罩层 */}
-        <div className={styles.mask} />
+        <div className={styles.mask} onClick={onCancel} />
 
         {/* 条件内容 */}
         <div className={styles.tags}>

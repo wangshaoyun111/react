@@ -140,13 +140,17 @@ export default class Filter extends Component {
   renderFilterMore() {
     const {
       openType,
-      filtersData: { roomType, oriented, floor, characteristic }
+      filtersData: { roomType, oriented, floor, characteristic },
+      selectedValues
     } = this.state
     if (openType !== 'more') return
     const data = {
       roomType, oriented, floor, characteristic
     }
-    return <FilterMore data={data} onSave={this.onSave} type={openType} />
+
+    // 获取到选中以后的值
+    const moreDefaultValues = selectedValues.more
+    return <FilterMore data={data} onCancel={this.onCancel} onSave={this.onSave} type={openType} />
   }
   render() {
     const { titleSelectedStatus, openType } = this.state
@@ -156,7 +160,7 @@ export default class Filter extends Component {
         {/* <div className={styles.mask} /> */}
         {
           openType === 'area' || openType === 'mode' || openType === 'price' ? (
-            <div className={styles.mask} />
+            <div className={styles.mask} onClick={this.onCancel} />
           ) : null
         }
         <div className={styles.content}>
