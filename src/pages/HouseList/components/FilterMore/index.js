@@ -49,8 +49,15 @@ export default class FilterMore extends Component {
     )
   }
 
+  onCancel = () => {
+    this.setState({
+      selectedValues: []
+    })
+
+  }
   render() {
-    const { data: { roomType, oriented, floor, characteristic } } = this.props
+    const { data: { roomType, oriented, floor, characteristic }, onSave, type } = this.props
+    const { selectedValues } = this.state
     return (
       <div className={styles.root}>
         {/* 遮罩层 */}
@@ -74,7 +81,7 @@ export default class FilterMore extends Component {
         </div>
 
         {/* 底部按钮 */}
-        <FilterFooter className={styles.footer} />
+        <FilterFooter className={styles.footer} onCancel={this.onCancel} onOk={() => onSave(type, selectedValues)} />
       </div>
     )
   }

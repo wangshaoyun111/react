@@ -17,3 +17,7 @@ html, body {
 ul, li {
   list-style: none;
 }
+
+.am-tab-bar-bar {
+  z-index: 1;
+}
