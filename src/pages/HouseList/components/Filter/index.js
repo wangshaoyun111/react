@@ -56,8 +56,8 @@ export default class Filter extends Component {
         newTitleSelectedStatus[item] = true
       } else if (item === 'price' && selectedVal[0] !== 'null') {
         newTitleSelectedStatus[item] = true
-      } else if (item === 'more') {
-
+      } else if (item === 'more' && selectedVal.length !== 0) {
+        newTitleSelectedStatus[item] = true
       } else {
         newTitleSelectedStatus[item] = false
       }
@@ -80,17 +80,50 @@ export default class Filter extends Component {
     })
   }
   // 取消按钮，和点击隐藏整个筛选框的方法
-  onCancel = () => {
+  onCancel = (type) => {
+    console.log(type);
+    const { titleSelectedStatus, selectedValues } = this.state
+    const selectedVal = selectedValues[type]
+    const newTitleSelectedStatus = { ...titleSelectedStatus }
+    if (type === 'area' && (selectedVal.length !== 2 || selectedVal[0] !== 'area')) {
+      newTitleSelectedStatus[type] = true
+    } else if (type === 'mode' && selectedVal[0] !== 'null') {
+      newTitleSelectedStatus[type] = true
+    } else if (type === 'price' && selectedVal[0] !== 'null') {
+      newTitleSelectedStatus[type] = true
+    } else if (type === 'more' && selectedVal.length !== 0) {
+      newTitleSelectedStatus[type] = true
+    } else {
+      newTitleSelectedStatus[type] = false
+    }
     this.setState({
-      openType: ''
+      openType: '',
+      titleSelectedStatus: newTitleSelectedStatus
     })
   }
   // 确定按钮
   onSave = (type, value) => {
-    console.log(type, value);
+    // 获取默认高亮效果
+    const { titleSelectedStatus } = this.state
+    // 创建新的标题选中状态对象
+    const newTitleSelectedStatus = { ...titleSelectedStatus }
+    const selectedVal = value
+    // 获取到高亮的状态
+    if (type === 'area' && (selectedVal.length !== 2 || selectedVal[0] !== 'area')) {
+      newTitleSelectedStatus[type] = true
+    } else if (type === 'mode' && selectedVal[0] !== 'null') {
+      newTitleSelectedStatus[type] = true
+    } else if (type === 'price' && selectedVal[0] !== 'null') {
+      newTitleSelectedStatus[type] = true
+    } else if (type === 'more' && selectedVal.length !== 0) {
+      newTitleSelectedStatus[type] = true
+    } else {
+      newTitleSelectedStatus[type] = false
+    }
     this.setState({
       openType: '',
-      selectedValues: { ...this.state.selectedValues, [type]: value }
+      selectedValues: { ...this.state.selectedValues, [type]: value },
+      titleSelectedStatus: newTitleSelectedStatus
     })
   }
   // 渲染组件数据的方法

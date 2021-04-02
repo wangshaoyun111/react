@@ -61,7 +61,7 @@ export default class FilterMore extends Component {
     return (
       <div className={styles.root}>
         {/* 遮罩层 */}
-        <div className={styles.mask} onClick={onCancel} />
+        <div className={styles.mask} onClick={() => { onCancel(type) }} />
 
         {/* 条件内容 */}
         <div className={styles.tags}>
@@ -81,7 +81,11 @@ export default class FilterMore extends Component {
         </div>
 
         {/* 底部按钮 */}
-        <FilterFooter className={styles.footer} onCancel={this.onCancel} onOk={() => onSave(type, selectedValues)} />
+        <FilterFooter
+          cancelText='清除'
+          className={styles.footer}
+          onCancel={() => { this.onCancel() }}
+          onOk={() => onSave(type, selectedValues)} />
       </div>
     )
   }

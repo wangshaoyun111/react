@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import styles from './index.module.css'
 
 function FilterFooter({
-  cancelText = '清除',
+  cancelText = '取消',
   okText = '确定',
   onCancel,
   onOk,
