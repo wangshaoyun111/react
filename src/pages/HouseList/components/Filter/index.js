@@ -131,9 +131,9 @@ export default class Filter extends Component {
 
     // 根据筛选添加，组装参数
     // 定义组装参数的对象
-    const houseParams = {
 
-    }
+    const houseParams = {}
+
     // 结构区域参数
     const { area, mode, price, more } = newSelectedValues
     // 获取area中的第一个参数确认是区域还是地铁
@@ -143,7 +143,6 @@ export default class Filter extends Component {
     if (area.length === 3) {
       areaValue = area[2] !== 'null' ? area[2] : area[1]
     }
-
     // 处理好以后添加到houseParams
     houseParams[areaKey] = areaValue
     // 将方式添加到houseParams
@@ -152,7 +151,8 @@ export default class Filter extends Component {
     houseParams.price = price[0]
     // 将筛选条件转化成，分隔的字符串
     houseParams.more = more.join(',')
-    console.log(houseParams);
+
+    this.props.onFilter(houseParams)
   }
   // 渲染组件数据的方法
   renderFilterPicker() {

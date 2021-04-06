@@ -9,11 +9,35 @@ import SearchHeader from '../../components/SearchHeader/index.jsx'
 // 导入组件
 
 import Filter from './components/Filter/index'
+
+import { API } from '../../utils/api.js'
 import styles from './index.module.css'
 // 获取本地存储的城市信息
 const { label } = JSON.parse(localStorage.getItem('hkzf_city'))
 
 export default class HouseList extends React.Component {
+    // 获取filter组件传递的数据
+    onFilter = (value) => {
+        // 接收子组件传递的筛选条件，挂在到this
+        this.filters = value
+
+        this.searchHouseList()
+    }
+    // 获取房源列表信息
+    searchHouseList = async () => {
+        // 获取当前城市ID
+        const { value } = JSON.parse(localStorage.getItem('hkzf_city'))
+        const params = {
+            cityId: value,
+            ...this.filters,
+            start: 1,
+            end: 10
+        }
+        // 发起筛选请求
+        const { data: res } = await API.get('/houses', { params })
+        console.log(res);
+    }
+
     render() {
         return (
             <div className="house_list">
@@ -23,7 +47,7 @@ export default class HouseList extends React.Component {
                 </Flex>
 
                 {/* 调用条件筛选栏 */}
-                <Filter></Filter>
+                <Filter onFilter={this.onFilter}></Filter>
             </div>
         )
     }
