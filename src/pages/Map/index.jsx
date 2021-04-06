@@ -5,7 +5,8 @@ import { Toast } from 'antd-mobile'
 import styles from './index.module.css'
 // import axios from 'axios'
 import { API } from '../../utils/api.js'
-
+// 导入封装的 HouseItem 组件
+import HouseItem from '../../components/HouseItem/index.jsx'
 // 导入 BASE_URL 变量
 import { BASE_URL } from '../../utils/url.js'
 const BMap = window.BMap
@@ -245,32 +246,14 @@ export default class Map extends React.Component {
     // 渲染小区 ui 结构的方法
     renderHouseList() {
         return this.state.houseList.map(item => (
-            <div className={styles.house} key={item.houseCode}>
-                <div className={styles.imgWrap}>
-                    <img
-                        className={styles.img}
-                        src={BASE_URL + item.houseImg}
-                        alt=""
-                    />
-                </div>
-                <div className={styles.content}>
-                    <h3 className={styles.title}>{item.title}</h3>
-                    <div className={styles.desc}>{item.desc}</div>
-                    <div>
-                        {item.tags.map(tag => (
-                            <span
-                                className={[styles.tag, styles.tag1].join(' ')}
-                                key={tag}
-                            >
-                                {tag}
-                            </span>
-                        ))}
-                    </div>
-                    <div className={styles.price}>
-                        <span className={styles.priceNum}>{item.price}</span> 元/月
-                    </div>
-                </div>
-            </div>
+            <HouseItem
+                key={item.houseCode}
+                houseImg={BASE_URL + item.houseImg}
+                title={item.title}
+                desc={item.desc}
+                tags={item.tags}
+                price={item.price}
+            />
         ))
     }
     render() {
