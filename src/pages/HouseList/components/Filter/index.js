@@ -22,6 +22,7 @@ const selectedValues = {
   more: []
 }
 // 获取当前定位城市id
+const { value } = JSON.parse(localStorage.getItem('hkzf_city'))
 export default class Filter extends Component {
   state = {
     titleSelectedStatus, // 控制高亮
@@ -72,7 +73,6 @@ export default class Filter extends Component {
   }
   // 获取筛选条件的方法
   async getFiltersData() {
-    const { value } = JSON.parse(localStorage.getItem('hkzf_city'))
     const { data: res } = await API.get(`/houses/condition?id=${value}`)
     console.log(res);
     this.setState({
@@ -104,9 +104,10 @@ export default class Filter extends Component {
   // 确定按钮
   onSave = (type, value) => {
     // 获取默认高亮效果
-    const { titleSelectedStatus } = this.state
+    const { titleSelectedStatus, selectedValues } = this.state
     // 创建新的标题选中状态对象
     const newTitleSelectedStatus = { ...titleSelectedStatus }
+    const newSelectedValues = { ...selectedValues, [type]: value }
     const selectedVal = value
     // 获取到高亮的状态
     if (type === 'area' && (selectedVal.length !== 2 || selectedVal[0] !== 'area')) {
@@ -120,11 +121,38 @@ export default class Filter extends Component {
     } else {
       newTitleSelectedStatus[type] = false
     }
-    this.setState({
-      openType: '',
-      selectedValues: { ...this.state.selectedValues, [type]: value },
-      titleSelectedStatus: newTitleSelectedStatus
+    this.setState((state) => {
+      return {
+        openType: '',
+        selectedValues: newSelectedValues,
+        titleSelectedStatus: newTitleSelectedStatus
+      }
     })
+
+    // 根据筛选添加，组装参数
+    // 定义组装参数的对象
+    const houseParams = {
+
+    }
+    // 结构区域参数
+    const { area, mode, price, more } = newSelectedValues
+    // 获取area中的第一个参数确认是区域还是地铁
+    const areaKey = area[0]
+    // 获取area中的最后一项，如果是null获取第二项
+    let areaValue = 'null'
+    if (area.length === 3) {
+      areaValue = area[2] !== 'null' ? area[2] : area[1]
+    }
+
+    // 处理好以后添加到houseParams
+    houseParams[areaKey] = areaValue
+    // 将方式添加到houseParams
+    houseParams.mode = mode[0]
+    // 将价格添加到houseParams
+    houseParams.price = price[0]
+    // 将筛选条件转化成，分隔的字符串
+    houseParams.more = more.join(',')
+    console.log(houseParams);
   }
   // 渲染组件数据的方法
   renderFilterPicker() {
