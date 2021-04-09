@@ -1,7 +1,7 @@
 import React from 'react'
 
 // 导入 antd-mobile 组件
-import { Flex } from 'antd-mobile'
+import { Flex, Toast } from 'antd-mobile'
 
 // 导入封装的 HouseItem 组件
 import HouseItem from '../../components/HouseItem/index.jsx'
@@ -42,6 +42,7 @@ export default class HouseList extends React.Component {
     searchHouseList = async () => {
         // 获取当前城市ID
         const { value } = JSON.parse(localStorage.getItem('hkzf_city'))
+        Toast.loading('加载中')
         const params = {
             cityId: value,
             ...this.filters,
@@ -52,10 +53,15 @@ export default class HouseList extends React.Component {
         const { data: res } = await API.get('/houses', { params })
         // 返回的房源列表赋值
         if (res.status !== 200) return
+
+        Toast.hide()
         this.setState({
             list: res.body.list,
             count: res.body.count
         })
+        if (this.state.count !== 0) {
+            Toast.info(`共找到${this.state.count}套房源`)
+        }
     }
 
     renderHouseList = ({
@@ -87,7 +93,7 @@ export default class HouseList extends React.Component {
             />
         )
     }
-    // // isRowLoaded 表示每一行数据是否加载完成
+    // isRowLoaded 表示每一行数据是否加载完成
 
     isRowLoaded = ({ index }) => {
         return !!this.state.list[index]
