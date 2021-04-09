@@ -8,7 +8,7 @@ import HouseItem from '../../components/HouseItem/index.jsx'
 import { List, AutoSizer, WindowScroller, InfiniteLoader } from 'react-virtualized'
 // 导入封装的顶部搜索栏组件
 import SearchHeader from '../../components/SearchHeader/index.jsx'
-
+import NoHouses from '../../components/NoHouse/index.js'
 // 导入组件
 
 import Filter from './components/Filter/index'
@@ -23,7 +23,8 @@ const { label } = JSON.parse(localStorage.getItem('hkzf_city'))
 export default class HouseList extends React.Component {
     state = {
         list: [], // 列表数据
-        count: 0 // 房源数据总条数
+        count: 0, // 房源数据总条数
+        isLoading: false // 数据是否正在请求
     }
     componentDidMount() {
         // 刚进入页面获取房源列表数据
@@ -42,6 +43,10 @@ export default class HouseList extends React.Component {
     searchHouseList = async () => {
         // 获取当前城市ID
         const { value } = JSON.parse(localStorage.getItem('hkzf_city'))
+
+        this.setState({
+            isLoading: true
+        })
         Toast.loading('加载中')
         const params = {
             cityId: value,
@@ -57,7 +62,8 @@ export default class HouseList extends React.Component {
         Toast.hide()
         this.setState({
             list: res.body.list,
-            count: res.body.count
+            count: res.body.count,
+            isLoading: false
         })
         if (this.state.count !== 0) {
             Toast.info(`共找到${this.state.count}套房源`)
@@ -93,8 +99,53 @@ export default class HouseList extends React.Component {
             />
         )
     }
+    renderList = () => {
+        const { count, isLoading } = this.state
+        if (count === 0 && !isLoading) {
+            return <NoHouses>没有找到房源，请您换个搜索条件吧</NoHouses>
+        }
+        return (
+            // {/* rowCount 列表数据总条数 */}
+            <InfiniteLoader
+                isRowLoaded={this.isRowLoaded}
+                loadMoreRows={this.loadMoreRows}
+                rowCount={this.state.count}
+            >
+                {
+                    ({ onRowsRendered, registerChild }) => (
+                        <WindowScroller>
+                            {
+                                // // height：视口高度
+                                // isScrolling：表示是否滚动中，用来覆盖List组件自身的滚动状态
+                                // scrollTop：页面滚动的距离，用来同步 List 组件的滚动距离
+                                ({ height, isScrolling, scrollTop }) => (
+                                    <AutoSizer>
+                                        {
+                                            ({ width }) => (
+                                                <List
+                                                    onRowsRendered={onRowsRendered}
+                                                    ref={registerChild}
+                                                    autoHeight
+                                                    width={width}
+                                                    height={height}
+                                                    rowCount={this.state.count}
+                                                    rowHeight={120}
+                                                    isScrolling={isScrolling}
+                                                    scrollTop={scrollTop}
+                                                    rowRenderer={this.renderHouseList}
+                                                />
+                                            )
+                                        }
+                                    </AutoSizer>
+                                )
+                            }
+                        </WindowScroller>
+                    )
+                }
+            </InfiniteLoader>
+        )
+    }
     // isRowLoaded 表示每一行数据是否加载完成
-
     isRowLoaded = ({ index }) => {
         return !!this.state.list[index]
     }
@@ -129,49 +180,9 @@ export default class HouseList extends React.Component {
                     {/* 调用条件筛选栏 */}
                     <Filter onFilter={this.onFilter}></Filter>
                 </div>
-
-
-
                 {/* 房源列表 */}
                 <div className={styles.houseItems}>
-                    {/* rowCount 列表数据总条数 */}
-                    <InfiniteLoader
-                        isRowLoaded={this.isRowLoaded}
-                        loadMoreRows={this.loadMoreRows}
-                        rowCount={this.state.count}
-                    >
-                        {
-                            ({ onRowsRendered, registerChild }) => (
-                                <WindowScroller>
-                                    {
-                                        // // height：视口高度
-                                        // isScrolling：表示是否滚动中，用来覆盖List组件自身的滚动状态
-                                        // scrollTop：页面滚动的距离，用来同步 List 组件的滚动距离
-                                        ({ height, isScrolling, scrollTop }) => (
-                                            <AutoSizer>
-                                                {
-                                                    ({ width }) => (
-                                                        <List
-                                                            onRowsRendered={onRowsRendered}
-                                                            ref={registerChild}
-                                                            autoHeight
-                                                            width={width}
-                                                            height={height}
-                                                            rowCount={this.state.count}
-                                                            rowHeight={120}
-                                                            isScrolling={isScrolling}
-                                                            scrollTop={scrollTop}
-                                                            rowRenderer={this.renderHouseList}
-                                                        />
-                                                    )
-                                                }
-                                            </AutoSizer>
-                                        )
-                                    }
-                                </WindowScroller>
-                            )
-                        }
-                    </InfiniteLoader>
+                    {this.renderList()}
                 </div>
             </div >
         )
