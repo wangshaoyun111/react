@@ -32,10 +32,12 @@ export default class Filter extends Component {
   }
   // 调用获取筛选数据方法
   componentDidMount() {
+    this.body = document.body
     this.getFiltersData()
     console.log(this.state.filtersData);
   }
   onTitleClick = (type) => {
+    this.body.className = 'body-fixed'
     // console.log(type)
     const { titleSelectedStatus, selectedValues } = this.state
     // 创建新的标题选中状态对象
@@ -81,6 +83,7 @@ export default class Filter extends Component {
   }
   // 取消按钮，和点击隐藏整个筛选框的方法
   onCancel = (type) => {
+    this.body.className = ''
     console.log(type);
     const { titleSelectedStatus, selectedValues } = this.state
     const selectedVal = selectedValues[type]
@@ -103,6 +106,7 @@ export default class Filter extends Component {
   }
   // 确定按钮
   onSave = (type, value) => {
+    this.body.className = ''
     // 获取默认高亮效果
     const { titleSelectedStatus, selectedValues } = this.state
     // 创建新的标题选中状态对象

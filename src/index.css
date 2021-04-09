@@ -21,3 +21,6 @@ ul, li {
 .am-tab-bar-bar {
   z-index: 1;
 }
+.body-fixed{
+  overflow: hidden;
+}

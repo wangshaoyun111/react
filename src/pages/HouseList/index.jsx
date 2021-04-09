@@ -36,7 +36,8 @@ export default class HouseList extends React.Component {
     onFilter = (value) => {
         // 接收子组件传递的筛选条件，挂在到this
         this.filters = value
-
+        // 当筛选条件改变时，页面回到顶部
+        window.scrollTo(0, 0)
         this.searchHouseList()
     }
     // 获取房源列表信息
