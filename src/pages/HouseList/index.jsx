@@ -16,6 +16,8 @@ import Filter from './components/Filter/index'
 import { API } from '../../utils/api.js'
 // 导入 BASE_URL 变量
 import { BASE_URL } from '../../utils/url.js'
+// 导入获取城市信息的方法
+import { getCurrentCityName } from '../../utils/getCityName.js'
 import styles from './index.module.css'
 // 获取本地存储的城市信息
 const { label } = JSON.parse(localStorage.getItem('hkzf_city'))
@@ -24,9 +26,14 @@ export default class HouseList extends React.Component {
     state = {
         list: [], // 列表数据
         count: 0, // 房源数据总条数
-        isLoading: false // 数据是否正在请求
+        isLoading: false, // 数据是否正在请求
+        cityName: '' // 当前城市的名字
     }
-    componentDidMount() {
+    async componentDidMount() {
+        const { label } = await getCurrentCityName()
+        this.setState({
+            cityName: label
+        })
         // 刚进入页面获取房源列表数据
         this.searchHouseList()
     }
@@ -176,7 +183,7 @@ export default class HouseList extends React.Component {
                 <div className={styles.sticky}>
                     <Flex className={styles.header}>
                         <i className="iconfont icon-back" onClick={() => this.props.history.go(-1)} />
-                        <SearchHeader className={styles.searchHeader} currentCityName={label}></SearchHeader>
+                        <SearchHeader className={styles.searchHeader} currentCityName={this.state.cityName}></SearchHeader>
                     </Flex>
                     {/* 调用条件筛选栏 */}
                     <Filter onFilter={this.onFilter}></Filter>
