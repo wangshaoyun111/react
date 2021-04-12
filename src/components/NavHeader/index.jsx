@@ -12,6 +12,8 @@ function NavHeader(props) {
     // 这里的props就是withRouter提供的信息就不需要组件使用者传递
     const defaultBack = () => props.history.go(-1)
 
+    // const className = this.props.className
+    // const rightContent = this.props.rightContent
     // 封装发现，不能通过 props 获取 history
     // 使用 react-router-dom 路由模块提供的 withRouter方法（高阶组件）
     return (
@@ -20,7 +22,7 @@ function NavHeader(props) {
                 className='navBar'
                 mode="light"
                 icon={<i className='iconfont icon-back'></i>}
-                onLeftClick={defaultBack}>
+                onLeftClick={props.onLeftClick || defaultBack}>
                 {props.children}
             </NavBar>
         </div>

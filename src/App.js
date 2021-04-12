@@ -4,6 +4,7 @@ import React from 'react'
 import Home from './pages/Home/index'
 import CityList from './pages/CityList/index'
 import Map from './pages/Map/index'
+import HouseDetail from './pages/HouseDetail'
 // 导入路由配置文件
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <Route path='/home' component={Home} ></Route>
         <Route path='/map' component={Map} ></Route>
         <Route path='/cityList' component={CityList} ></Route>
+        <Route path="/detail" component={HouseDetail} />
       </div>
     </Router>
   )
