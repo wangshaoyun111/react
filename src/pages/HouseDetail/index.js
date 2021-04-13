@@ -7,14 +7,14 @@ import HouseItem from '../../components/HouseItem'
 import HousePackage from '../../components/HousePackage'
 
 import { BASE_URL } from '../../utils/url'
-
+import { API } from '../../utils/api.js'
 import styles from './index.module.css'
 
 // 猜你喜欢
 const recommendHouses = [
   {
     id: 1,
-    src: BASE_URL + '/img/message/1.png',
+    houseImg: BASE_URL + '/img/message/1.png',
     desc: '72.32㎡/南 北/低楼层',
     title: '安贞西里 3室1厅',
     price: 4500,
@@ -22,7 +22,7 @@ const recommendHouses = [
   },
   {
     id: 2,
-    src: BASE_URL + '/img/message/2.png',
+    houseImg: BASE_URL + '/img/message/2.png',
     desc: '83㎡/南/高楼层',
     title: '天居园 2室1厅',
     price: 7200,
@@ -30,7 +30,7 @@ const recommendHouses = [
   },
   {
     id: 3,
-    src: BASE_URL + '/img/message/3.png',
+    houseImg: BASE_URL + '/img/message/3.png',
     desc: '52㎡/西南/低楼层',
     title: '角门甲4号院 1室1厅',
     price: 4300,
@@ -100,8 +100,23 @@ export default class HouseDetail extends Component {
       latitude: '31.219228',
       longitude: '121.391768'
     })
+    // 获取当前房源具体信息
+    this.getHouseDetail()
   }
-
+  getHouseDetail = async () => {
+    this.setState({
+      isLoading: true
+    })
+    const { id } = this.props.match.params
+    const { data: res } = await API.get(`/houses/${id}`)
+    if (res.status !== 200) return
+    this.setState({
+      houseInfo: res.body,
+      isLoading: false
+    })
+    const { community, coord } = res.body
+    this.renderMap(community, coord)
+  }
   // 渲染轮播图结构
   renderSwipers() {
     const {
@@ -110,7 +125,7 @@ export default class HouseDetail extends Component {
 
     return houseImg.map(item => (
       <a
-        key={item.id}
+        key={item}
         href="http://itcast.cn"
         style={{
           display: 'inline-block',
@@ -119,7 +134,7 @@ export default class HouseDetail extends Component {
         }}
       >
         <img
-          src={BASE_URL + item.imgSrc}
+          src={BASE_URL + item}
           alt=""
           style={{ width: '100%', verticalAlign: 'top' }}
         />

@@ -1,8 +1,8 @@
 import React from 'react'
 import styles from './index.module.css'
-function HouseItem({ houseImg, title, desc, tags, price, style }) {
+function HouseItem({ houseImg, title, desc, tags, price, style, onClick }) {
     return (
-        <div className={styles.house} style={style}>
+        <div className={styles.house} style={style} onClick={onClick}>
             <div className={styles.imgWrap}>
                 <img
                     className={styles.img}

@@ -104,6 +104,7 @@ export default class HouseList extends React.Component {
                 desc={item.desc}
                 tags={item.tags}
                 price={item.price}
+                onClick={() => { this.props.history.push(`/detail/${item.houseCode}`) }}
             />
         )
     }

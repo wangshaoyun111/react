@@ -25,7 +25,8 @@
   position: absolute;
   z-index: 2;
   color: rgb(255, 255, 255);
-  background-color: transparent;
+  background-color: #21b97a;
+  width: 100%;
 }
 
 /* 房屋基础信息 */
