@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { Flex, WingBlank, WhiteSpace } from 'antd-mobile'
+import { Flex, WingBlank, WhiteSpace, Toast } from 'antd-mobile'
 
 import { Link } from 'react-router-dom'
 
+import { API } from '../../utils/api.js'
 import NavHeader from '../../components/NavHeader'
 
 import styles from './index.module.css'
@@ -12,7 +13,41 @@ import styles from './index.module.css'
 // const REG_PWD = /^[a-zA-Z_\d]{5,12}$/
 
 class Login extends Component {
+  state = {
+    username: '', // 账号用户名
+    password: '' // 密码
+  }
+
+  // 获取用户名
+  getUsername = (e) => {
+    this.setState({
+      username: e.target.value
+    })
+  }
+
+  // 获取密码
+  getPassword = (e) => {
+    this.setState({
+      password: e.target.value
+    })
+  }
+  // 登录提交
+  handleSubmit = async (e) => {
+    // 阻止表单提交默认行为
+    e.preventDefault()
+    const { username, password } = this.state
+    const { data: res } = await API.post('/user/login', { username, password })
+
+    if (res.status !== 200) {
+      return Toast.info('登陆失败，请检查用户名密码')
+    }
+    Toast.info('登录成功')
+    localStorage.setItem('hkzf_token', res.body.token)
+    // 返回上一页
+    this.props.history.go(-1)
+  }
   render() {
+    const { username, password } = this.state
     return (
       <div className={styles.root}>
         {/* 顶部导航 */}
@@ -21,11 +56,13 @@ class Login extends Component {
 
         {/* 登录表单 */}
         <WingBlank>
-          <form>
+          <form onSubmit={this.handleSubmit}>
             <div className={styles.formItem}>
               <input
                 className={styles.input}
                 name="username"
+                value={username}
+                onChange={this.getUsername}
                 placeholder="请输入账号"
               />
             </div>
@@ -35,6 +72,8 @@ class Login extends Component {
               <input
                 className={styles.input}
                 name="password"
+                value={password}
+                onChange={this.getPassword}
                 type="password"
                 placeholder="请输入密码"
               />
