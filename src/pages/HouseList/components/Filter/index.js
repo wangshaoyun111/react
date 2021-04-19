@@ -214,8 +214,15 @@ export default class Filter extends Component {
     }
 
     // 获取到选中以后的值
-    const moreDefaultValues = selectedValues.more
-    return <FilterMore data={data} onCancel={this.onCancel} onSave={this.onSave} type={openType} />
+    const defaultValue = selectedValues.more
+
+    return <FilterMore
+      data={data}
+      onCancel={this.onCancel}
+      onSave={this.onSave}
+      type={openType}
+      defaultValue={defaultValue}
+    />
   }
   render() {
     const { titleSelectedStatus, openType } = this.state

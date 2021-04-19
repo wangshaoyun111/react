@@ -53,7 +53,6 @@ export default class FilterMore extends Component {
     this.setState({
       selectedValues: []
     })
-
   }
   render() {
     const { data: { roomType, oriented, floor, characteristic }, onSave, type, onCancel } = this.props

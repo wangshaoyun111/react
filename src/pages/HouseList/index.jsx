@@ -20,7 +20,7 @@ import { BASE_URL } from '../../utils/url.js'
 import { getCurrentCityName } from '../../utils/getCityName.js'
 import styles from './index.module.css'
 // 获取本地存储的城市信息
-const { label } = JSON.parse(localStorage.getItem('hkzf_city'))
+// const { label } = JSON.parse(localStorage.getItem('hkzf_city'))
 
 export default class HouseList extends React.Component {
     state = {
