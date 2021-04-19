@@ -9,7 +9,7 @@ import NavHeader from '../../components/NavHeader'
 import styles from './index.module.css'
 
 // 导入 withFormik
-import { withFormik } from 'formik'
+import { withFormik, Form, Field, ErrorMessage } from 'formik'
 // 导入 表单验证 Yup
 import * as Yup from 'yup'
 
@@ -24,10 +24,6 @@ class Login extends Component {
   }
 
   render() {
-    // const { username, password } = this.state
-
-    // 通过this.props 获取到 withFormik 高阶组件提供的属性
-    const { values, handleSubmit, handleChange, handleBlur, errors, touched } = this.props
     return (
       <div className={styles.root}>
         {/* 顶部导航 */}
@@ -36,42 +32,40 @@ class Login extends Component {
 
         {/* 登录表单 */}
         <WingBlank>
-          <form onSubmit={handleSubmit}>
+          <Form>
             <div className={styles.formItem}>
-              <input
+              <Field
                 className={styles.input}
                 name="username"
-                value={values.username}
-                onChange={handleChange}
-                onBlur={handleBlur}
                 placeholder="请输入账号"
               />
             </div>
             {/* 长度为5到8位，只能出现数字、字母、下划线 */}
-            {errors.username && touched.username && (
+            {/* {errors.username && touched.username && (
               <div className={styles.error}>{errors.username}</div>
-            )}
+            )} */}
+            <ErrorMessage className={styles.error} name='username' component='div'></ErrorMessage>
+
             <div className={styles.formItem}>
-              <input
+              <Field
                 className={styles.input}
                 name="password"
-                value={values.password}
-                onChange={handleChange}
-                onBlur={handleBlur}
                 type="password"
                 placeholder="请输入密码"
               />
             </div>
             {/* 长度为5到12位，只能出现数字、字母、下划线 */}
-            {errors.password && touched.password && (
+            {/* {errors.password && touched.password && (
               <div className={styles.error}>{errors.password}</div>
-            )}
+            )} */}
+            <ErrorMessage className={styles.error} name='password' component='div'></ErrorMessage>
+
             <div className={styles.formSubmit}>
               <button className={styles.submit} type="submit">
                 登 录
               </button>
             </div>
-          </form>
+          </Form>
           <Flex className={styles.backHome}>
             <Flex.Item>
               <Link to="/registe">还没有账号，去注册~</Link>
