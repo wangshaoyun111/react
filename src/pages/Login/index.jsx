@@ -24,7 +24,6 @@ class Login extends Component {
   }
 
   render() {
-    const { username, password } = this.state
     return (
       <div className={styles.root}>
         {/* 顶部导航 */}
@@ -38,8 +37,6 @@ class Login extends Component {
               <Field
                 className={styles.input}
                 name="username"
-                value={username}
-                onChange={this.getUsername}
                 placeholder="请输入账号"
               />
             </div>
@@ -53,8 +50,6 @@ class Login extends Component {
               <Field
                 className={styles.input}
                 name="password"
-                value={password}
-                onChange={this.getPassword}
                 type="password"
                 placeholder="请输入密码"
               />
