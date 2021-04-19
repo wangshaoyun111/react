@@ -1,18 +1,58 @@
 import React, { Component } from 'react'
-import { Flex, WingBlank, WhiteSpace } from 'antd-mobile'
+import { Flex, WingBlank, WhiteSpace, Toast } from 'antd-mobile'
 
 import { Link } from 'react-router-dom'
 
+import { API } from '../../utils/api.js'
 import NavHeader from '../../components/NavHeader'
 
 import styles from './index.module.css'
 
+// 导入 withFormik
+import { withFormik } from 'formik'
 // 验证规则：
 // const REG_UNAME = /^[a-zA-Z_\d]{5,8}$/
 // const REG_PWD = /^[a-zA-Z_\d]{5,12}$/
 
 class Login extends Component {
+  state = {
+    username: '', // 账号用户名
+    password: '' // 密码
+  }
+
+  // // 获取用户名
+  // getUsername = (e) => {
+  //   this.setState({
+  //     username: e.target.value
+  //   })
+  // }
+
+  // // 获取密码
+  // getPassword = (e) => {
+  //   this.setState({
+  //     password: e.target.value
+  //   })
+  // }
+  // // 登录提交
+  // handleSubmit = async (e) => {
+  //   // 阻止表单提交默认行为
+  //   e.preventDefault()
+  //   const { username, password } = this.state
+  //   const { data: res } = await API.post('/user/login', { username, password })
+
+  //   if (res.status !== 200) {
+  //     return Toast.info('登陆失败，请检查用户名密码')
+  //   }
+  //   Toast.info('登录成功')
+  //   localStorage.setItem('hkzf_token', res.body.token)
+  //   // 返回上一页
+  //   this.props.history.go(-1)
+  // }
   render() {
+    // const { username, password } = this.state
+
+    // 通过this.props 获取到 withFormik 高阶组件提供的属性
+    const { values, handleSubmit, handleChange } = this.props
     return (
       <div className={styles.root}>
         {/* 顶部导航 */}
@@ -21,11 +61,13 @@ class Login extends Component {
 
         {/* 登录表单 */}
         <WingBlank>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className={styles.formItem}>
               <input
                 className={styles.input}
                 name="username"
+                value={values.username}
+                onChange={handleChange}
                 placeholder="请输入账号"
               />
             </div>
@@ -35,6 +77,8 @@ class Login extends Component {
               <input
                 className={styles.input}
                 name="password"
+                value={values.password}
+                onChange={handleChange}
                 type="password"
                 placeholder="请输入密码"
               />
@@ -58,4 +102,23 @@ class Login extends Component {
   }
 }
 
-export default Login
+// 使用withFormik将Login组件金星报告
+// 为 Login 组件提供属性和方法
+export default withFormik({
+  // 声明需要 获取到对应表单值
+  mapPropsToValues: () => ({ username: '', password: '' }),
+
+  // 表单提交事件
+  handleSubmit: async (values, { props }) => {
+    const { username, password } = values
+    const { data: res } = await API.post('/user/login', { username, password })
+
+    if (res.status !== 200) {
+      return Toast.info('登陆失败，请检查用户名密码')
+    }
+    Toast.info('登录成功')
+    localStorage.setItem('hkzf_token', res.body.token)
+    // 返回上一页
+    props.history.go(-1)
+  }
+})(Login)

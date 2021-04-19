@@ -4,7 +4,6 @@ import { NavBar } from 'antd-mobile'
 import { withRouter } from 'react-router-dom'
 import styles from './index.module.css'
 function NavHeader(props) {
-    console.log(props)
     // 通过组件调用者来传递方法不能直接使用props.history
 
     // 定义返回上一页函数，组件使用者没有传入onLeftClick，点击会报错
