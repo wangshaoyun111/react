@@ -5,6 +5,9 @@ import Home from './pages/Home/index'
 import CityList from './pages/CityList/index'
 import Map from './pages/Map/index'
 import HouseDetail from './pages/HouseDetail'
+// 登录 注册
+import Login from './pages/Login/index.jsx'
+import Registe from './pages/Registe/index.jsx'
 // 导入路由配置文件
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 function App() {
@@ -21,6 +24,8 @@ function App() {
         <Route path='/map' component={Map} ></Route>
         <Route path='/cityList' component={CityList} ></Route>
         <Route path="/detail/:id" component={HouseDetail} />
+        <Route path="/login" component={Login} />
+        <Route path="/registe" component={Registe} />
       </div>
     </Router>
   )
