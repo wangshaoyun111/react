@@ -57,11 +57,7 @@ export default class Profile extends Component {
     if (!this.state.isLogin) {
       return
     }
-    const { data: res } = await API.get('/user', {
-      headers: {
-        authorization: getToken()
-      }
-    })
+    const { data: res } = await API.get('/user')
     if (res.status !== 200) return
     const { avatar, nickname } = res.body
     this.setState({
@@ -77,11 +73,7 @@ export default class Profile extends Component {
       { text: '取消' },
       {
         text: '确定', onPress: async () => {
-          const { data: res } = await API.post('/user/logout', null, {
-            headers: {
-              authorization: getToken()
-            }
-          })
+          const { data: res } = await API.post('/user/logout')
           if (res.status !== 200) return Toast.info('退出失败')
           removeToken()
           Toast.info('退出成功')
