@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
 
 import { Link } from 'react-router-dom'
-import { Grid, Button } from 'antd-mobile'
+import { Grid, Button, Modal, Toast } from 'antd-mobile'
 
 import { BASE_URL } from '../../utils/url.js'
-import { isAuth, getToken } from '../../utils/auth.js'
+import { isAuth, getToken, removeToken } from '../../utils/auth.js'
 import { API } from '../../utils/api.js'
 
 import styles from './index.module.css'
 
+// 挂载
+const alert = Modal.alert
 // 菜单数据
 const menus = [
   { id: 1, name: '我的收藏', iconfont: 'icon-coll', to: '/favorate' },
@@ -25,7 +27,7 @@ const menus = [
 
 // 默认头像
 const DEFAULT_AVATAR = BASE_URL + '/img/profile/avatar.png'
-console.log(DEFAULT_AVATAR)
+// console.log(DEFAULT_AVATAR)
 
 /* 
   1 在 state 中添加两个状态：isLogin（是否登录） 和 userInfo（用户信息）。
@@ -69,6 +71,32 @@ export default class Profile extends Component {
       }
     })
   }
+  // 退出登录
+  logout = () => {
+    alert('提示', '是否确定退出?', [
+      { text: '取消' },
+      {
+        text: '确定', onPress: async () => {
+          const { data: res } = await API.post('/user/logout', null, {
+            headers: {
+              authorization: getToken()
+            }
+          })
+          if (res.status !== 200) return Toast.info('退出失败')
+          removeToken()
+          Toast.info('退出成功')
+          this.setState({
+            isLogin: false,
+            userInfo: {
+              avatar: '',
+              nickname: ''
+            }
+          })
+        }
+      }
+    ])
+  }
+
   render() {
     const { history } = this.props
     const { isLogin, userInfo: { avatar, nickname } } = this.state
