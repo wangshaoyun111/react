@@ -40,13 +40,38 @@ console.log(DEFAULT_AVATAR)
 export default class Profile extends Component {
 
   state = {
-    isLogin: false // 判断用户是否已经登陆
+    isLogin: isAuth(), // 判断用户是否已经登陆
+    userInfo: {
+      avatar: '', // 用户头像
+      nickname: '' // 用户昵称
+    } //（用户信息）
   }
 
+  componentDidMount() {
+    this.getUserInfo()
+  }
+  // 获取用户信息方法
+  async getUserInfo() {
+    if (!this.state.isLogin) {
+      return
+    }
+    const { data: res } = await API.get('/user', {
+      headers: {
+        authorization: getToken()
+      }
+    })
+    if (res.status !== 200) return
+    const { avatar, nickname } = res.body
+    this.setState({
+      userInfo: {
+        avatar: avatar === null ? DEFAULT_AVATAR : BASE_URL + avatar,
+        nickname
+      }
+    })
+  }
   render() {
     const { history } = this.props
-    const { isLogin } = this.state
-
+    const { isLogin, userInfo: { avatar, nickname } } = this.state
 
     return (
       <div className={styles.root}>
@@ -61,12 +86,12 @@ export default class Profile extends Component {
             <div className={styles.myIcon}>
               <img
                 className={styles.avatar}
-                src={DEFAULT_AVATAR}
+                src={avatar || DEFAULT_AVATAR}
                 alt="icon"
               />
             </div>
             <div className={styles.user}>
-              <div className={styles.name}>{'游客'}</div>
+              <div className={styles.name}>{nickname || '游客'}</div>
               {/* 登录后展示： */}
               {isLogin ? (
                 <>
