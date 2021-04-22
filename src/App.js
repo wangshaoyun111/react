@@ -26,7 +26,7 @@ function App() {
         <Route path='/home' component={Home} ></Route>
         <Route path='/map' component={Map} ></Route>
         <Route path='/cityList' component={CityList} ></Route>
-        <Route path="/detail/:id" component={HouseDetail} />
+        <AuthRouter path="/detail/:id" component={HouseDetail} />
         <Route path="/login" component={Login} />
         <Route path="/registe" component={Registe} />
       </div>

@@ -104,9 +104,9 @@ export default class HouseDetail extends Component {
       latitude: '31.219228',
       longitude: '121.391768'
     })
-    const { id } = this.props.match.params
+    // const { id } = this.props.match.params
     this.setState({
-      id
+      id: this.props.match.params.id
     })
     // 获取当前房源具体信息
     this.getHouseDetail()
@@ -120,9 +120,12 @@ export default class HouseDetail extends Component {
     // 没有登录之间 return
     if (!isLogin) return
     // 登陆了获取房源 ID
+    const { id } = this.props.match.params
+
     // 调用接口查看该房源是否收藏
-    const { data: res } = await API.get(`/user/favorites/${this.state.id}`)
+    const { data: res } = await API.get(`/user/favorites/${id}`)
     if (res.status !== 200) return
+    console.log(res.body.isFavorite);
     this.setState({
       isFavorite: res.body.isFavorite
     })
@@ -214,7 +217,7 @@ export default class HouseDetail extends Component {
       })
       Toast.info('您取消了收藏', 1, null, false)
     } else {
-      const { data: res } = await API.get(`/user/favorites/${this.state.id}`)
+      const { data: res } = await API.post(`/user/favorites/${id}`)
       if (res.status !== 200) return Toast.info('收藏失败', 1, null, false)
       this.setState({
         isFavorite: true

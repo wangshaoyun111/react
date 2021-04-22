@@ -103,6 +103,5 @@ export default withFormik({
     } else {
       props.history.replace(props.location.state.from.pathname)
     }
-
   }
 })(Login)
