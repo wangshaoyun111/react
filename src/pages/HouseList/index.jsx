@@ -74,7 +74,7 @@ export default class HouseList extends React.Component {
             isLoading: false
         })
         if (this.state.count !== 0) {
-            Toast.info(`共找到${this.state.count}套房源`)
+            Toast.info(`共找到${this.state.count}套房源`, 1, null, false)
         }
     }
 

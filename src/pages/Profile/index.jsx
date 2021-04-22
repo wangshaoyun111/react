@@ -74,9 +74,9 @@ export default class Profile extends Component {
       {
         text: '确定', onPress: async () => {
           const { data: res } = await API.post('/user/logout')
-          if (res.status !== 200) return Toast.info('退出失败')
+          if (res.status !== 200) return Toast.info('退出失败', 1, null, false)
           removeToken()
-          Toast.info('退出成功')
+          Toast.info('退出成功', 1, null, false)
           this.setState({
             isLogin: false,
             userInfo: {

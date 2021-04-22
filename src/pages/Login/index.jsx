@@ -94,7 +94,7 @@ export default withFormik({
     const { data: res } = await API.post('/user/login', { username, password })
 
     if (res.status !== 200) {
-      return Toast.info('登陆失败，请检查用户名密码')
+      return Toast.info('登陆失败，请检查用户名密码', 1, null, false)
     }
     localStorage.setItem('hkzf_token', res.body.token)
     if (!props.location.state) {
