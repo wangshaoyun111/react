@@ -10,6 +10,9 @@ import Login from './pages/Login/index.jsx'
 import Registe from './pages/Registe/index.jsx'
 // 导入路由配置文件
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
+
+// 导入 鉴权组件 
+import AuthRouter from './components/AuthRouter/index.jsx'
 function App() {
   return (
     <Router>
