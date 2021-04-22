@@ -97,7 +97,12 @@ export default withFormik({
       return Toast.info('登陆失败，请检查用户名密码')
     }
     localStorage.setItem('hkzf_token', res.body.token)
-    // 返回上一页
-    props.history.go(-1)
+    if (!props.location.state) {
+      // 返回上一页
+      props.history.go(-1)
+    } else {
+      props.history.replace(props.location.state.from.pathname)
+    }
+
   }
 })(Login)
