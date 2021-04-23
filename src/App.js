@@ -13,6 +13,13 @@ import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 
 // 导入 鉴权组件 
 import AuthRouter from './components/AuthRouter/index.jsx'
+
+// 发布房源路由
+import Rent from './pages/Rent'
+import RentAdd from './pages/Rent/Add'
+import RentSearch from './pages/Rent/Search'
+
+
 function App() {
   return (
     <Router>
@@ -29,6 +36,10 @@ function App() {
         <AuthRouter path="/detail/:id" component={HouseDetail} />
         <Route path="/login" component={Login} />
         <Route path="/registe" component={Registe} />
+
+        <AuthRouter exact path='/rent' component={Rent} />
+        <AuthRouter path='/rent/add' component={RentAdd} />
+        <AuthRouter path='/rent/search' component={RentSearch} />
       </div>
     </Router>
   )

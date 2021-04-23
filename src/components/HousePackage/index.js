@@ -132,3 +132,7 @@ export default class HousePackage extends Component {
     return <ul className={styles.root}>{this.renderItems()}</ul>
   }
 }
+
+HousePackage.defaultProps = {
+  onSelect: () => { }
+}
