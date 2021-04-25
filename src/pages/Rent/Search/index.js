@@ -17,13 +17,18 @@ export default class Search extends Component {
     searchTxt: '',
     tipsList: []
   }
-
+  onTipClick = (item) => {
+    this.props.history.replace('/rent/add', {
+      name: item.communityName,
+      id: item.community
+    })
+  }
   // 渲染搜索结果列表
   renderTips = () => {
     const { tipsList } = this.state
 
     return tipsList.map(item => (
-      <li key={item.community} className={styles.tip}>
+      <li key={item.community} className={styles.tip} onClick={() => this.onTipClick(item)}>
         {item.communityName}
       </li>
     ))

@@ -49,15 +49,21 @@ export default class RentAdd extends Component {
   constructor(props) {
     super(props)
 
+    const { state } = props.location
+    const community = {
+      name: '',
+      id: ''
+    }
+    if (state) {
+      community.name = state.name
+      community.id = state.id
+    }
     this.state = {
       // 临时图片地址
       tempSlides: [],
 
       // 小区的名称和id
-      community: {
-        name: '',
-        id: ''
-      },
+      community: community,
       // 价格
       price: '',
       // 面积
