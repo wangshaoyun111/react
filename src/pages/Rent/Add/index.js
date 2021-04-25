@@ -85,6 +85,13 @@ export default class RentAdd extends Component {
     }
   }
 
+  // 获取表单数据
+  getValue = (name, value) => {
+    this.setState({
+      [name]: value
+    })
+  }
+
   // 取消编辑，返回上一页
   onCancel = () => {
     alert('提示', '放弃发布房源?', [
@@ -98,6 +105,14 @@ export default class RentAdd extends Component {
     ])
   }
 
+  // 获取房屋数据配置
+  handleSupporting = (seclected) => {
+    this.setState({
+      supporting: seclected.join('|')
+    })
+    console.log(this.state.supporting);
+  }
+
   render() {
     const Item = List.Item
     const { history } = this.props
@@ -109,7 +124,8 @@ export default class RentAdd extends Component {
       oriented,
       description,
       tempSlides,
-      title
+      title,
+      size
     } = this.state
 
     return (
@@ -129,22 +145,22 @@ export default class RentAdd extends Component {
           >
             小区名称
           </Item>
-          <InputItem placeholder="请输入租金/月" extra="￥/月" value={price}>
+          <InputItem placeholder="请输入租金/月" extra="￥/月" value={price} onChange={(value) => this.getValue('price', value)}>
             租&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;金
           </InputItem>
-          <InputItem placeholder="请输入建筑面积" extra="㎡">
+          <InputItem placeholder="请输入建筑面积" extra="㎡" value={size} onChange={(value) => this.getValue('size', value)}>
             建筑面积
           </InputItem>
-          <Picker data={roomTypeData} value={[roomType]} cols={1}>
+          <Picker data={roomTypeData} value={[roomType]} cols={1} onChange={(value) => this.getValue('roomType', value[0])}>
             <Item arrow="horizontal">
               户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;型
             </Item>
           </Picker>
 
-          <Picker data={floorData} value={[floor]} cols={1}>
+          <Picker data={floorData} value={[floor]} cols={1} onChange={(value) => this.getValue('floor', value[0])}>
             <Item arrow="horizontal">所在楼层</Item>
           </Picker>
-          <Picker data={orientedData} value={[oriented]} cols={1}>
+          <Picker data={orientedData} value={[oriented]} cols={1} onChange={(value) => this.getValue('oriented', value[0])}>
             <Item arrow="horizontal">
               朝&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;向
             </Item>
@@ -159,6 +175,7 @@ export default class RentAdd extends Component {
           <InputItem
             placeholder="请输入标题（例如：整租 小区名 2室 5000元）"
             value={title}
+            onChange={(value) => this.getValue('title', value)}
           />
         </List>
 
@@ -179,7 +196,7 @@ export default class RentAdd extends Component {
           renderHeader={() => '房屋配置'}
           data-role="rent-list"
         >
-          <HousePackge select />
+          <HousePackge select onSelect={this.handleSupporting} />
         </List>
 
         <List
@@ -192,6 +209,7 @@ export default class RentAdd extends Component {
             placeholder="请输入房屋描述信息"
             autoHeight
             value={description}
+            onChange={(value) => this.getValue('description', value)}
           />
         </List>
 
