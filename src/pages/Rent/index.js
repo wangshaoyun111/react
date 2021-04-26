@@ -47,7 +47,7 @@ export default class Rent extends Component {
         <HouseItem
           key={item.houseCode}
           onClick={() => history.push(`/detail/${item.houseCode}`)}
-          src={BASE_URL + item.houseImg}
+          houseImg={BASE_URL + item.houseImg}
           title={item.title}
           desc={item.desc}
           tags={item.tags}

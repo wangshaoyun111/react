@@ -7,7 +7,8 @@ import {
   Picker,
   ImagePicker,
   TextareaItem,
-  Modal
+  Modal,
+  Toast
 } from 'antd-mobile'
 
 import NavHeader from '../../../components/NavHeader'
@@ -122,7 +123,19 @@ export default class RentAdd extends Component {
 
   // 发布房源
   addHouse = async () => {
-    const { tempSlides } = this.state
+    const {
+      tempSlides,
+      community,
+      price,
+      roomType,
+      floor,
+      oriented,
+      description,
+      title,
+      supporting,
+      size
+    } = this.state
+    let houseImg = ''
     if (tempSlides.length > 0) {
       const form = new FormData()
       tempSlides.forEach(item => {
@@ -135,10 +148,25 @@ export default class RentAdd extends Component {
         }
       })
       if (res.status !== 200) return
-      this.setState({
-        houseImg: res.body.join('|')
-      })
+      houseImg = res.body.join('|')
     }
+
+    // 发布房源接口
+    const { data: res } = await API.post('/user/houses', {
+      community: community.id,
+      price,
+      roomType,
+      floor,
+      oriented,
+      description,
+      title,
+      houseImg,
+      supporting,
+      size
+    })
+    if (res.status !== 200) return Toast.info('服务器偷懒了,请稍后再试', 2, null, false)
+    Toast.info('发布成功', 2, null, false)
+    this.props.history.push('/rent')
   }
 
   render() {
