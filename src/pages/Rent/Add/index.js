@@ -12,7 +12,7 @@ import {
 
 import NavHeader from '../../../components/NavHeader'
 import HousePackge from '../../../components/HousePackage'
-
+import { API } from '../../../utils/api.js'
 import styles from './index.module.css'
 
 const alert = Modal.alert
@@ -113,6 +113,34 @@ export default class RentAdd extends Component {
     console.log(this.state.supporting);
   }
 
+  // 获取房屋图片
+  handleHouseImg = (files, type, index) => {
+    this.setState({
+      tempSlides: files
+    })
+  }
+
+  // 发布房源
+  addHouse = async () => {
+    const { tempSlides } = this.state
+    if (tempSlides.length > 0) {
+      const form = new FormData()
+      tempSlides.forEach(item => {
+        form.append('file', item.file)
+      })
+
+      const { data: res } = await API.post('/houses/image', form, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      if (res.status !== 200) return
+      this.setState({
+        houseImg: res.body.join('|')
+      })
+    }
+  }
+
   render() {
     const Item = List.Item
     const { history } = this.props
@@ -188,6 +216,7 @@ export default class RentAdd extends Component {
             files={tempSlides}
             multiple={true}
             className={styles.imgpicker}
+            onChange={this.handleHouseImg}
           />
         </List>
 
