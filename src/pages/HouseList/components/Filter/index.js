@@ -5,7 +5,7 @@ import FilterPicker from '../FilterPicker'
 import FilterMore from '../FilterMore'
 import { API } from '../../../../utils/api'
 import styles from './index.module.css'
-
+import { getCurrentCityName } from '../../../../utils/getCityName'
 // 标题高亮状态
 // true 表示高亮； false 表示不高亮
 const titleSelectedStatus = {
@@ -21,20 +21,27 @@ const selectedValues = {
   price: ['null'],
   more: []
 }
-// 获取当前定位城市id
-const { value } = JSON.parse(localStorage.getItem('hkzf_city'))
+
 export default class Filter extends Component {
   state = {
     titleSelectedStatus, // 控制高亮
     selectedValues,
     openType: '', // 控制组件展开和合并
-    filtersData: []
+    filtersData: [],
+    id: ''
   }
   // 调用获取筛选数据方法
-  componentDidMount() {
+  async componentDidMount() {
     this.body = document.body
-    this.getFiltersData()
-    console.log(this.state.filtersData);
+    // 获取当前定位城市id
+    const { value } = await getCurrentCityName()
+    this.setState((state) => {
+      return {
+        id: value
+      }
+    }, () => {
+      this.getFiltersData()
+    })
   }
   onTitleClick = (type) => {
     this.body.className = 'body-fixed'
@@ -75,7 +82,7 @@ export default class Filter extends Component {
   }
   // 获取筛选条件的方法
   async getFiltersData() {
-    const { data: res } = await API.get(`/houses/condition?id=${value}`)
+    const { data: res } = await API.get(`/houses/condition?id=${this.state.id}`)
     console.log(res);
     this.setState({
       filtersData: res.body

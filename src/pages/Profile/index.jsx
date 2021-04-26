@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { Grid, Button, Modal, Toast } from 'antd-mobile'
 
 import { BASE_URL } from '../../utils/url.js'
-import { isAuth, getToken, removeToken } from '../../utils/auth.js'
+import { isAuth, removeToken } from '../../utils/auth.js'
 import { API } from '../../utils/api.js'
 
 import styles from './index.module.css'
